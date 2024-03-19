@@ -1,0 +1,50 @@
+// Author : Louis OLLIVIER ~ louis.ollivier@etu.univ-rouen.fr 
+// Université Paris-Saclay
+// Lab : LISN ~ UMR9015 ~ BIOINFO team 
+
+initialize() {
+	initializeTreeSeq();
+	initializeMutationRate(c(0,mu,0), c(499999,500000,1999999));
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	initializeMutationType("m2", h, "f", s);
+	m1.mutationStackPolicy = "l";
+	initializeGenomicElementType("g1", m1, 1.0);
+	
+	
+	initializeRecombinationRate(c(rho*GR, 0.5, rho*GR), c(999999,1000000,1999999));
+	
+	initializeGenomicElement(g1, 0, 1999999);
+	
+	defineGlobal("gen_recomb", asInteger(rnorm(1,GR,asInteger(GR/10))));
+}
+
+1 early(){ sim.addSubpop("p1", Ne);}
+
+early() {
+	if(GR!=1){ // Not EGR
+		if (sim.cycle != gen_recomb){
+			p1.setCloningRate(1.0);
+		}
+		else {
+			p1.setCloningRate(0.0);
+			defineGlobal("gen_recomb", gen_recomb + asInteger(rnorm(1,GR,asInteger(GR/10))));
+		}
+	}
+}
+
+2000 early(){
+	g = sim.subpopulations.genomes;
+	myind = sample(g, asInteger(Ne*f));
+	for (ind in myind){
+		ind.addNewMutation(m2, s, 500000);
+	}
+}
+
+2000:10000 late() { // if mutation is lost = stop 
+	if (sim.countOfMutationsOfType(m2) == 0){
+		sim.treeSeqOutput(paste("ts_",rep,".trees",sep=""));
+		sim.outputFixedMutations();
+		sim.simulationFinished();
+	}
+}
+
