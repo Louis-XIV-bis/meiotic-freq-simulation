@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-## Author : Louis OLLIVIER ~ louis.ollivier@etu.univ-rouen.fr 
 ## Université Paris-Saclay
 ## Lab : LISN ~ UMR9015 ~ BIOINFO team 
 

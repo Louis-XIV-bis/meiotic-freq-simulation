@@ -1,10 +1,5 @@
 #!/bin/bash
 
-#SBATCH --mem=128GB
-
-source /shared/ifbstor1/software/miniconda/bin/activate SLiMLouis
-
-## Author : Louis OLLIVIER ~ louis.ollivier@etu.univ-rouen.fr
 ## Université Paris-Saclay
 ## Lab : LISN ~ UMR9015 ~ BIOINFO team
 
