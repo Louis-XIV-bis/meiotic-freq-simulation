@@ -107,11 +107,11 @@ pi_h0p4 = ggplot(pi_table_h0p4, aes(x = windows/1000000, y = mean, group = submo
   scale_fill_manual(values = colors) +
   labs(x = "Sequence position (Mbp)",
        y = expression(pi ~ " (branch length)"),
-       color = "Meiotic frequency",
-       fill = "Meiotic frequency",
-       linetype = "Meiotic frequency") + 
+       color = "m (meiotic frequency)",
+       fill = "m (meiotic frequency)",
+       linetype = "m (meiotic frequency)") + 
   theme_light() + 
-  ggtitle("h = 0.4 (control)") + 
+  ggtitle("h = 0.4") + 
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),

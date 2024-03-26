@@ -96,7 +96,7 @@ pi_var = ggplot(pi_table_var, aes(x = windows/1000000, y = mean, group = submode
     plot.title = element_text(size = 20, hjust = 0.5)
   ) +
   guides(color = "none", fill = "none") + 
-  ggtitle(expression(rho ~ "= 5e-8 (control)")) +
+  ggtitle(expression(rho ~ "= 5e-8")) +
   scale_y_continuous(limits = y_axis_limits)
 pi_var
 
@@ -107,9 +107,9 @@ pi_fix = ggplot(pi_table_fix, aes(x = windows/1000000, y = mean, group = submode
   scale_fill_manual(values = colors) +
   labs(x = "Sequence position (Mbp)",
        y = expression(pi ~ "(branch length)"),
-       color = "Meiotic frequency",
-       fill = "Meiotic frequency",
-       linetype = "Meiotic frequency") + 
+       color = "m (meiotic frequency)",
+       fill = "m (meiotic frequency)",
+       linetype = "m (meiotic frequency)") + 
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),
@@ -136,18 +136,18 @@ combined_plot_chr1
 
 ggsave("pi_rhofixvar.png", plot = combined_plot_chr1, width = 16, height = 6, units = "in")
 
-pi_chr2_var = csv_to_tibble(GR_list, "rhovar", windows) %>% filter(windows > 1000000)
+pi_chr2_var = csv_to_tibble(GR_list, "ctrl", windows) %>% filter(windows > 1000000)
 pi_chr2_var
 pi_chr2_fix = csv_to_tibble(GR_list, "rhofixe", windows) %>% filter(windows > 1000000)
 pi_chr2_fix
 
 pi_var_chr2 = ggplot(pi_chr2_var, aes(x = submodel, y = (mean - 2000), group = submodel, color = factor(submodel), fill = factor(submodel))) +
   geom_boxplot() +
-  labs(x = "Meiotic frequency (m)",
+  labs(x = "m (meiotic frequency)",
        y = "Fixation time (generations)",
        title = expression(paste(rho," = 5e-8 (chromosome 2)")),
-       color = "Meiotic frequency (m)",
-       fill = "Meiotic frequency (m)") +
+       color = "m (meiotic frequency)",
+       fill = "m (meiotic frequency)") +
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),
@@ -166,8 +166,8 @@ pi_fix_chr2 = ggplot(pi_chr2_fix, aes(x = submodel, y = (mean - 2000), group = s
   labs(x = "Meiotic frequency (m)",
        y = "Fixation time (generations)",
        title = expression(paste(rho[m]," = 5e-8 (chromosome 2)")),
-       color = "Meiotic frequency (m)",
-       fill = "Meiotic frequency (m)") +
+       color = "m (meiotic frequency)",
+       fill = "m (meiotic frequency)") +
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),

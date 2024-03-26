@@ -64,20 +64,20 @@ GR_list = c("EGR", "10GR", "50GR", "100GR")
 pi_table_ctrl = csv_to_tibble(GR_list, "ctrl", windows)
 pi_ctrl_chr1 = pi_table_ctrl %>% filter(windows < 1000000)
 
-pi_table_fav = csv_to_tibble(GR_list, "low_rho", windows)
-pi_low_chr1 = pi_table_fav %>% filter(windows < 1000000)
+pi_table_fav = csv_to_tibble(GR_list, "high_s", windows)
+pi_fav_chr1 = pi_table_fav %>% filter(windows < 1000000)
 
-pi_table_unfav = csv_to_tibble(GR_list, "high_rho", windows)
-pi_high_chr1 = pi_table_unfav %>% filter(windows < 1000000)
+pi_table_unfav = csv_to_tibble(GR_list, "low_s", windows)
+pi_unfav_chr1 = pi_table_unfav %>% filter(windows < 1000000)
 
 pi_table_ctrl = csv_to_tibble(GR_list, "ctrl", windows)
 pi_ctrl_chr2 = pi_table_ctrl %>% filter(windows > 1000000)
 
-pi_table_low = csv_to_tibble(GR_list, "low_rho", windows)
-pi_low_chr2 = pi_table_low %>% filter(windows > 1000000)
+pi_table_fav = csv_to_tibble(GR_list, "high_s", windows)
+pi_fav_chr2 = pi_table_fav %>% filter(windows > 1000000)
 
-pi_table_high = csv_to_tibble(GR_list, "high_rho", windows)
-pi_high_chr2 = pi_table_high %>% filter(windows > 1000000)
+pi_table_unfav = csv_to_tibble(GR_list, "low_s", windows)
+pi_unfav_chr2 = pi_table_unfav %>% filter(windows > 1000000)
 
 ########################################################################
 # Create plots individually #
@@ -92,7 +92,7 @@ palette_name <- "Dark2"
 colors <- brewer.pal(n = num_conditions, name = palette_name)
 
 # Using the extracted color palette for both geom_line and geom_ribbon
-plot_low_chr1 = ggplot(pi_low_chr1, aes(x = windows/1000000, y = mean, group = submodel)) +
+plot_unfav_chr1 = ggplot(pi_unfav_chr1, aes(x = windows/1000000, y = mean, group = submodel)) +
   geom_ribbon(aes(ymin = ymin, ymax = ymax, fill = submodel),alpha=0.2) +
   geom_line(aes(color = submodel)) +
   scale_color_manual(values = colors) +
@@ -100,7 +100,7 @@ plot_low_chr1 = ggplot(pi_low_chr1, aes(x = windows/1000000, y = mean, group = s
   labs(x = "Sequence position (Mbp)",
        y = expression(pi ~ "(branch length)")) + 
   theme_light() + 
-  ggtitle(expression(rho ~ " = 1e-8")) + 
+  ggtitle("s = 0.02") + 
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
@@ -110,7 +110,7 @@ plot_low_chr1 = ggplot(pi_low_chr1, aes(x = windows/1000000, y = mean, group = s
   ) +
   guides(color = "none", fill = "none") + 
   scale_y_continuous(limits = y_axis_limits)
-plot_low_chr1
+plot_unfav_chr1
 
 plot_ctrl_chr1 = ggplot(pi_ctrl_chr1, aes(x = windows/1000000, y = mean, group = submodel)) +
   geom_ribbon(aes(ymin = ymin, ymax = ymax, fill = submodel),alpha=0.2) +
@@ -119,11 +119,11 @@ plot_ctrl_chr1 = ggplot(pi_ctrl_chr1, aes(x = windows/1000000, y = mean, group =
   scale_fill_manual(values = colors) +
   labs(x = "Sequence position (Mbp)",
        y = expression(pi ~ " (branch length)"),
-       color = "Meiotic frequency",
-       fill = "Meiotic frequency",
-       linetype = "Meiotic frequency") + 
+       color = "m (meiotic frequency)",
+       fill = "m (meiotic frequency)",
+       linetype = "m (meiotic frequency)") + 
   theme_light() + 
-  ggtitle(expression(rho ~ " = 5e-8 (control)")) + 
+  ggtitle("s = 0.1") + 
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
@@ -137,14 +137,14 @@ plot_ctrl_chr1 = ggplot(pi_ctrl_chr1, aes(x = windows/1000000, y = mean, group =
   scale_y_continuous(limits = y_axis_limits)
 plot_ctrl_chr1
 
-plot_high_chr1 = ggplot(pi_high_chr1, aes(x = windows/1000000, y = mean, group = submodel)) +
+plot_fav_chr1 = ggplot(pi_fav_chr1, aes(x = windows/1000000, y = mean, group = submodel)) +
   geom_ribbon(aes(ymin = ymin, ymax = ymax, fill = submodel),alpha=0.2) +
   geom_line(aes(color = submodel)) +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
   labs(x = "Sequence position (Mbp)") +
   theme_light() + 
-  ggtitle(expression(rho ~ " = 1e-7")) + 
+  ggtitle("s = 0.5") +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
@@ -154,13 +154,14 @@ plot_high_chr1 = ggplot(pi_high_chr1, aes(x = windows/1000000, y = mean, group =
   ) +
   guides(color = "none", fill = "none") + 
   scale_y_continuous(limits = y_axis_limits)
-plot_high_chr1
+plot_fav_chr1
 
-plot_low_chr2 = ggplot(pi_low_chr2, aes(x = submodel, y = mean, fill = submodel)) +
+# Using the extracted color palette for both geom_line and geom_ribbon
+plot_unfav_chr2 = ggplot(pi_unfav_chr2, aes(x = submodel, y = mean, fill = submodel)) +
   geom_boxplot() +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
-  labs(x = "Meiotic frequency (m)",
+  labs(x = "m (meiotic frequency)",
        y = expression(pi ~ "(branch length)")) + 
   theme_light() + 
   theme(
@@ -171,34 +172,36 @@ plot_low_chr2 = ggplot(pi_low_chr2, aes(x = submodel, y = mean, fill = submodel)
   ) +
   guides(color = "none", fill = "none") + 
   scale_y_continuous(limits = y_axis_limits)
-plot_low_chr2
+plot_unfav_chr2
 
 plot_ctrl_chr2 = ggplot(pi_ctrl_chr2, aes(x = submodel, y = mean, fill = submodel)) +
   geom_boxplot() +
   geom_line(aes(color = submodel)) +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
-  labs(x = "Meiotic frequency (m)",
+  labs(x = "m (meiotic frequency)",
        y = expression(pi ~ " (branch length)"),
-       color = "Meiotic frequency",
-       fill = "Meiotic frequency",
-       linetype = "Meiotic frequency") + 
+       color = "m (meiotic frequency)",
+       fill = "m (meiotic frequency)",
+       linetype = "m (meiotic frequency)") + 
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
+    legend.title = element_text(size = 20),
+    legend.text = element_text(size = 20),
     axis.text.x = element_text(size = 17),
     axis.text.y = element_blank(),
-  ) + 
+  ) +   
   guides(color = "none", fill = "none") + 
   scale_y_continuous(limits = y_axis_limits)
 plot_ctrl_chr2
 
-plot_high_chr2 = ggplot(pi_high_chr2, aes(x = submodel, y = mean, fill = submodel)) +
+plot_fav_chr2 = ggplot(pi_fav_chr2, aes(x = submodel, y = mean, fill = submodel)) +
   geom_boxplot() +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
-  labs(x = "Meiotic frequency (m)") +
+  labs(x = "m (meiotic frequency)") +
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),
@@ -208,25 +211,26 @@ plot_high_chr2 = ggplot(pi_high_chr2, aes(x = submodel, y = mean, fill = submode
   ) +
   guides(color = "none", fill = "none") + 
   scale_y_continuous(limits = y_axis_limits)
-plot_high_chr2
+plot_fav_chr2
 
 # Extract the legend from the main plot
 legend_only <- get_legend(plot_ctrl_chr1)
 
 # Create the grid of plots using plot_grid
 combined_plot <- plot_grid(
-  plot_low_chr1 + theme(plot.margin = margin(l = 23)),
+  plot_unfav_chr1 + theme(plot.margin = margin(l = 23)),
   plot_ctrl_chr1 + theme(legend.position = "none", plot.margin = margin(l = 23)),
-  plot_high_chr1 + theme(plot.margin = margin(l = 23)), 
-  plot_low_chr2 + theme(plot.margin = margin(l = 23, t = 23)),
-  plot_ctrl_chr2 + theme(legend.position = "none", plot.margin = margin(l = 23, t = 23)),
-  plot_high_chr2 + theme(plot.margin = margin(l = 23, t = 23)), 
+  plot_fav_chr1 + theme(plot.margin = margin(l = 23)), 
+  plot_unfav_chr2 + theme(plot.margin = margin(l = 23, t = 23)),
+  plot_ctrl_chr2 + theme(plot.margin = margin(l = 23, t = 23)),
+  plot_fav_chr2 + theme(plot.margin = margin(l = 23, t = 23)), 
   NULL, legend_only, NULL,
   rel_heights = c(3,3,0.5),
   rel_widths = c(1.2,1,1),
   ncol = 3, nrow = 3, labels = c("A","B","C","D","E","F"), label_size = 20
 )
 combined_plot
-png('pi_sln_rho_wg.png',width=16,height=12,units="in",bg = "white", res=300)
+png('pi_sln_s_wg.png',width=16,height=12,units="in",bg = "white", res=300)
 combined_plot
 dev.off()
+
