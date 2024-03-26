@@ -32,7 +32,7 @@ cd meiotic-freq-simulation
 
 #### Create the appropriate environment using the conda export file provided
 ```
-conda env create -f workflow/envs/environment.yaml -n your_env_name
+conda env create -f scripts_simu/env.yml -n your_env_name
 ```
 
 ### Running the simulations
