@@ -198,7 +198,7 @@ plot_high_chr2 = ggplot(pi_high_chr2, aes(x = submodel, y = mean, fill = submode
   geom_boxplot() +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
-  labs(x = "Meiotic frequency (m)") +
+  labs(x = "m (meiotic frequency)") +
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),

@@ -141,6 +141,8 @@ pi_chr2_var
 pi_chr2_fix = csv_to_tibble(GR_list, "rhofixe", windows) %>% filter(windows > 1000000)
 pi_chr2_fix
 
+y_axis_limits <- c(0, 2000)
+
 pi_var_chr2 = ggplot(pi_chr2_var, aes(x = submodel, y = (mean - 2000), group = submodel, color = factor(submodel), fill = factor(submodel))) +
   geom_boxplot() +
   labs(x = "m (meiotic frequency)",
@@ -158,8 +160,9 @@ pi_var_chr2 = ggplot(pi_chr2_var, aes(x = submodel, y = (mean - 2000), group = s
   ) + 
   guides(color = "none", fill = "none") + 
   scale_fill_brewer(palette = "Dark2") +
-  scale_color_brewer(palette = "Dark2")
-pi_var_chr2
+  scale_color_brewer(palette = "Dark2") + 
+  scale_y_continuous(limits = y_axis_limits)
+
 
 pi_fix_chr2 = ggplot(pi_chr2_fix, aes(x = submodel, y = (mean - 2000), group = submodel, color = factor(submodel), fill = factor(submodel))) +
   geom_boxplot() +
@@ -179,7 +182,8 @@ pi_fix_chr2 = ggplot(pi_chr2_fix, aes(x = submodel, y = (mean - 2000), group = s
     plot.title = element_text(size = 20, hjust = 0.5)
   ) + 
   scale_fill_brewer(palette = "Dark2") +
-  scale_color_brewer(palette = "Dark2")
+  scale_color_brewer(palette = "Dark2") + 
+  scale_y_continuous(limits = y_axis_limits)
 pi_fix_chr2
 
 # Arrange the plots side by side using plot_grid
@@ -192,6 +196,6 @@ combined_plot_chr2 <- plot_grid(pi_var_chr2, pi_fix_chr2 + theme(plot.margin = m
 )
 combined_plot_chr2
 
-ggsave("pi_rhofixvar_chr2.png", plot = combined_plot_chr2, width = 16, height = 6, units = "in")
+ggsave("pi_rhofixvar_chr2_x.png", plot = combined_plot_chr2, width = 16, height = 6, units = "in")
 
 rm(list=ls())
