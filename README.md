@@ -7,7 +7,7 @@
 ## About the simulations 
 For each tested conditions (e.g. varying s or rho), the different test **m** (meiotic frequency) values are in separate folder. **EGR** for **m = 1**, **10GR** for **m = 0.1**, **50GR** for **m = 0.05** and **100GR** for **m = 0.01**. 
 
-THe main script of the pipeline is **sln_model.sh** which will run SLiM (simulations) and a python script (summary statistics). It will also contains all the parameters for simulation: 
+The main script of the pipeline is **sln_model.sh** which will run SLiM (simulations) and a python script (summary statistics). It also contains all the parameters for simulation: 
 
 - Ne: Population size
 - mu: Mutation rate
