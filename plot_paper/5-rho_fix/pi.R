@@ -118,36 +118,22 @@ pi_fix = ggplot(pi_table_fix, aes(x = windows/1000000, y = mean, group = submode
     legend.text = element_text(size = 20),
     axis.text.x = element_text(size = 18),
     axis.text.y = element_blank(), 
-    plot.title = element_text(size = 20, hjust = 0.5)
+    plot.title = element_text(size = 20, hjust = 0.5),
+    legend.position = "top"
   ) + 
   ggtitle(expression(paste(rho[m]," = 5e-8"))) +
   scale_y_continuous(limits = y_axis_limits)
 pi_fix
-
-# Arrange the plots side by side using plot_grid
-combined_plot_chr1 <- plot_grid(pi_var, pi_fix + theme(plot.margin = margin(l = 23)),
-                           labels = "AUTO",
-                           label_size = 20,
-                           ncol = 2,
-                           align = "h",  # Horizontal alignment
-                           rel_widths = c(1, 1.3)  # Adjust relative widths to account for the legend
-)
-combined_plot_chr1
-
-ggsave("pi_rhofixvar.png", plot = combined_plot_chr1, width = 16, height = 6, units = "in")
 
 pi_chr2_var = csv_to_tibble(GR_list, "ctrl", windows) %>% filter(windows > 1000000)
 pi_chr2_var
 pi_chr2_fix = csv_to_tibble(GR_list, "rhofixe", windows) %>% filter(windows > 1000000)
 pi_chr2_fix
 
-y_axis_limits <- c(0, 2000)
-
-pi_var_chr2 = ggplot(pi_chr2_var, aes(x = submodel, y = (mean - 2000), group = submodel, color = factor(submodel), fill = factor(submodel))) +
+pi_var_chr2 = ggplot(pi_chr2_var, aes(x = submodel, y = mean, group = submodel, color = factor(submodel), fill = factor(submodel))) +
   geom_boxplot() +
   labs(x = "m (meiotic frequency)",
-       y = "Fixation time (generations)",
-       title = expression(paste(rho," = 5e-8 (chromosome 2)")),
+       y = expression(pi ~ "(branch length)"),
        color = "m (meiotic frequency)",
        fill = "m (meiotic frequency)") +
   theme_light() + 
@@ -156,7 +142,6 @@ pi_var_chr2 = ggplot(pi_chr2_var, aes(x = submodel, y = (mean - 2000), group = s
     axis.title.y = element_text(size = 20),
     axis.text.x = element_text(size = 18),
     axis.text.y = element_text(size = 18), 
-    plot.title = element_text(size = 20, hjust = 0.5)
   ) + 
   guides(color = "none", fill = "none") + 
   scale_fill_brewer(palette = "Dark2") +
@@ -164,38 +149,52 @@ pi_var_chr2 = ggplot(pi_chr2_var, aes(x = submodel, y = (mean - 2000), group = s
   scale_y_continuous(limits = y_axis_limits)
 
 
-pi_fix_chr2 = ggplot(pi_chr2_fix, aes(x = submodel, y = (mean - 2000), group = submodel, color = factor(submodel), fill = factor(submodel))) +
+pi_fix_chr2 = ggplot(pi_chr2_fix, aes(x = submodel, y = mean, group = submodel, color = factor(submodel), fill = factor(submodel))) +
   geom_boxplot() +
-  labs(x = "Meiotic frequency (m)",
-       y = "Fixation time (generations)",
-       title = expression(paste(rho[m]," = 5e-8 (chromosome 2)")),
+  labs(x = "m (meiotic frequency)",
+       y = expression(pi ~ "(branch length)"),
        color = "m (meiotic frequency)",
        fill = "m (meiotic frequency)") +
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
-    legend.title = element_text(size = 20),
     legend.text = element_text(size = 20),
     axis.text.x = element_text(size = 18),
     axis.text.y = element_blank(), 
-    plot.title = element_text(size = 20, hjust = 0.5)
   ) + 
+  guides(color = "none", fill = "none") + 
   scale_fill_brewer(palette = "Dark2") +
   scale_color_brewer(palette = "Dark2") + 
   scale_y_continuous(limits = y_axis_limits)
 pi_fix_chr2
 
-# Arrange the plots side by side using plot_grid
-combined_plot_chr2 <- plot_grid(pi_var_chr2, pi_fix_chr2 + theme(plot.margin = margin(l = 23)),
-                                labels = "AUTO",
-                                label_size = 20,
-                                ncol = 2,
-                                align = "h",  # Horizontal alignment
-                                rel_widths = c(1, 1.3)  # Adjust relative widths to account for the legend
-)
-combined_plot_chr2
 
-ggsave("pi_rhofixvar_chr2_x.png", plot = combined_plot_chr2, width = 16, height = 6, units = "in")
+legend_only <- get_legend(pi_fix)
+
+library(gridExtra)
+
+# Combine the four plots into one panel
+combined_panel <- plot_grid(
+  plot_grid(pi_var + theme(plot.margin = margin(l = 23)), 
+            pi_fix  + theme(legend.position = "none", plot.margin = margin(l = 23)),
+            ncol = 2, rel_widths = c(1.2, 1),
+            labels = c("A","B"), label_size = 20
+),
+
+  plot_grid(pi_var_chr2 + theme(plot.margin = margin(l = 23, t = 20)),
+            pi_fix_chr2 + theme(plot.margin = margin(l = 23, t = 20)),
+            ncol = 2, rel_widths = c(1.2, 1),
+            labels = c("C","D"), label_size = 20
+),
+  legend_only,
+  ncol = 1, nrow = 3,                                 
+  rel_heights = c(3,3,0.5)
+)
+
+combined_panel
+png('pi_rhofixvar_wg.png',width=16,height=12,units="in",bg = "white", res=300)
+combined_panel
+dev.off()
 
 rm(list=ls())
