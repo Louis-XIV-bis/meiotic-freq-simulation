@@ -1,0 +1,36 @@
+// Université Paris-Saclay
+// Lab : LISN ~ UMR9015 ~ BIOINFO team 
+
+initialize() {
+	initializeTreeSeq();
+	initializeMutationRate(0);
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	m1.mutationStackPolicy = "l";
+	initializeGenomicElementType("g1", m1, 1.0);
+	
+	initializeRecombinationRate(rho*GR);
+	
+	initializeGenomicElement(g1, 0, 999999);
+	
+	defineGlobal("gen_recomb", asInteger(rnorm(1,GR,asInteger(GR/10))));
+}
+
+1 early(){ sim.addSubpop("p1", Ne);}
+
+early() {
+	if(GR!=1){ // Not EGR
+		if (sim.cycle != gen_recomb){
+			p1.setCloningRate(1.0);
+		}
+		else {
+			p1.setCloningRate(0.0);
+			defineGlobal("gen_recomb", gen_recomb + asInteger(rnorm(1,GR,asInteger(GR/10))));
+		}
+	}
+}
+
+10000 late() {
+	sim.treeSeqOutput(paste("ts_",rep,".trees",sep=""));
+	sim.outputFixedMutations();
+	sim.simulationFinished();
+}
