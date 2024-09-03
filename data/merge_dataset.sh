@@ -7,7 +7,7 @@ cp ../ctrl/data/pi_full_chr2_ctrl.csv . # specific for fig2
 # Function to merge CSV files based on a pattern (e.g., "pi" or "t")
 merge_csv_files() {
     local pattern=$1
-    local exp_list=("neutral" "ctrl" "h0p2" "h0p8" "high_rho" "high_s" "low_rho" "low_s" "rho_fixe")
+    local exp_list=("ctrl" "h0p2" "h0p8" "high_rho" "high_s" "low_rho" "low_s" "rho_fixe")
     local output_file="${pattern}_merged.csv"
     local header_written=false
 
@@ -30,5 +30,6 @@ merge_csv_files() {
 }
 
 # Call the function with different patterns
-merge_csv_files "pi"
-merge_csv_files "t"
+# merge_csv_files "pi"
+# merge_csv_files "t"
+merge_csv_files "t_pichr2_full"

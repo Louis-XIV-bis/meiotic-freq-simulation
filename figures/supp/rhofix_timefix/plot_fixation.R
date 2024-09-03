@@ -1,92 +1,74 @@
 #!/usr/bin/env Rscript
 
-## Author : Louis OLLIVIER ~ louis.ollivier@etu.univ-rouen.fr 
+## Author : Louis OLLIVIER ~ louis.ollivier@universite-paris-saclay.fr
 ## Université Paris-Saclay
 ## Lab : LISN ~ UMR9015 ~ BIOINFO team 
 
 ###### Package initialization  ----------------------------------------
 
 if (!require('ggplot2', quietly = T)) install.packages('ggplot2');
+if (!require('readr', quietly = T)) install.packages('readr');
+if (!require('tibble', quietly = T)) install.packages('tibble');
+if (!require('dplyr', quietly = T)) install.packages('dplyr');
 if (!require('sjPlot', quietly = T)) install.packages('sjPlot');
 if (!require('RColorBrewer', quietly = T)) install.packages('RColorBrewer');
-if (!require('dplyr', quietly = T)) install.packages('dyplr');
-if (!require('readr', quietly = T)) install.packages('readr');
-if (!require('dunn.test', quietly = T)) install.packages('cowplot');
+if (!require('cowplot', quietly = T)) install.packages('cowplot');
 
 library(ggplot2)
+library(readr)
+library(tibble)
+library(dplyr)
 library(sjPlot)
 library(RColorBrewer)
-library(dplyr)
-library(readr)
 library(cowplot)
-library(dunn.test)
 
 ########################################################################
+# Function that upload and format the data
+
 rm(list=ls())
 
-# Done only for neutral (not fav / unfav)
-t_100GR <- read.table("fix_100GR.txt", header = FALSE, col.names = "time")
-t_100GR$m = "0.01"
+# Subset data for chr1
+data_t = read_csv('../../../data/t_merged.csv') %>%
+  filter((h == 0.5 & s == 0.05) & (rho == '5e-08' | rho == '0,00000005')) %>% 
+  mutate(alpha = as.factor(1 / GR)) %>%
+  mutate(ymin = mean - sd, ymax = mean + sd) %>% 
+  mutate(label = case_when(rho == '5e-08' ~ 'rho', rho == '0,00000005' ~ 'rho_m', TRUE ~ 'other'))
+data_t
 
-t_50GR <- read.table("fix_50GR.txt", header = FALSE, col.names = "time")
-t_50GR$m = "0.05"
-
-t_10GR <- read.table("fix_10GR.txt", header = FALSE, col.names = "time")
-t_10GR$m = "0.1"
-
-t_EGR <- read.table("fix_EGR.txt", header = FALSE, col.names = "time")
-t_EGR$m = "1"
-
-merged_t <- rbind(t_100GR, t_50GR, t_10GR, t_EGR)
-
-result <- merged_t %>%
-  group_by(m) %>%
-  summarize(mean_time = mean(time, na.rm = TRUE) -2000)
-
-# Print the result
-print(result)
 ########################################################################
+# Create plots individually #
 
-t_rhofix = ggplot(merged_t, aes(x = m, y = time - 2000, fill = m)) +
-  geom_boxplot() +
-  labs(x = expression(s),
-       y = "Fixation time (generations)",
-       color=expression(m),
-       fill=expression(m),
-       linetype=expression(m)) +
-  scale_fill_brewer(palette="Dark2") +
+# Explicitly set the y-axis limits to be the same for both plots
+y_axis_limits <- c(0, max(data_t$ymax))
+
+# Create color palette 
+num_conditions <- length(unique(data_t$alpha))
+palette_name <- "Dark2"
+colors <- brewer.pal(n = num_conditions, name = palette_name)
+
+# Assuming `colors` is a predefined vector of colors
+plot_t = data_t %>% 
+  ggplot(aes(x = alpha, y = mean, group = interaction(alpha, label))) +
+  geom_point(aes(shape = factor(label), color = factor(alpha)), 
+             size = 6, position = position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin = ymin, ymax = ymax, color = factor(alpha)), 
+                width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
+  scale_shape_manual(values = c(15, 16, 17)) +  # Shapes: dot, square, triangle
+  scale_color_manual(values = colors) +
+  labs(x = expression(alpha), 
+       y = expression("Time to fixation (generations)"), 
+       shape = expression(label), 
+       color = expression(alpha)) + 
   theme_light() + 
-  ggtitle(expression(paste(rho[m]," = 5e-8 (chromosome 2)"))) + 
   theme(
-    axis.title.x = element_text(size=18),
-    axis.title.y = element_text(size=18),
-    legend.title = element_text(size = 18),
-    legend.text = element_text(size = 18),
-    axis.text.x = element_text(size = 16),
-    axis.text.y = element_text(size=16), 
-    plot.title = element_text(size = 20, hjust = 0.5)
-  )
-t_rhofix
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 18),
+    legend.title = element_text(size = 20),
+    legend.text = element_text(size = 18)
+  ) +
+  scale_y_continuous(limits = y_axis_limits)
+plot_t
 
-x = merged_t %>% filter(m == 0.01)
-mean(x$time -2000)
-
-ggsave("rhofix_timefix.png", plot = t_rhofix)
-
-
-# Statistical tests 
-shapiro.test(t_100GR$time-2000) 
-# p-value = 4.559e-05 => not gaussian 
-hist(as.vector(t_100GR$time-2000), probability = TRUE)
-
-shapiro.test(t_100GR$time-2000) 
-# p-value = 4.559e-05 => not gaussian 
-hist(as.vector(t_100GR$time-2000), probability = TRUE)
-
-shapiro.test(t_100GR$time-2000) 
-# p-value = 4.559e-05 => not gaussian 
-hist(as.vector(t_100GR$time-2000), probability = TRUE)
-
-kruskal.test(time - 2000 ~ factor(m), data = merged_t)
-# p-value = 0.5495 ==> There's NO significiant != between some groups 
-dunn.test(merged_t$time - 2000, factor(merged_t$m), method = "bonferroni")
+ggsave("rhofix_timefix.png", plot = plot_t, width = 12, height = 10, units = "in")

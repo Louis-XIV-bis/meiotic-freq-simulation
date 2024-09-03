@@ -56,7 +56,7 @@ for GR in GR_values:
                 's': s,
                 'h': h,
                 'rho': rho,
-                'rho_scaled': rho # WARNING : should be rho * GR in other cases
+                'rho_scaled': rho, # WARNING : should be rho * GR in other cases
                 'window': window_value,
                 'mean': mean_values.iloc[idx] if idx < len(mean_values) else None,  # Handle out-of-range index
                 'sd': sd_values.iloc[idx] if idx < len(sd_values) else None  # Handle out-of-range index
