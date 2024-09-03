@@ -89,4 +89,5 @@ plot
 png('fig2.png', width=14, height=6, units="in",bg = "white", res=600)
 plot
 dev.off()
+
 rm(list=ls())
