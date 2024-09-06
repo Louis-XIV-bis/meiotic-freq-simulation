@@ -79,7 +79,6 @@ plot_ctrl_chr1 = data_chr1 %>%
   scale_y_continuous(limits = y_axis_limits)
 plot_ctrl_chr1
 
-
 plot_rhom_chr1 = data_chr1 %>% 
   filter(rho == '0,00000005') %>% 
   ggplot(aes(x = window, y = mean, group = alpha)) +
@@ -92,7 +91,7 @@ plot_rhom_chr1 = data_chr1 %>%
        fill = expression(alpha),
        linetype = expression(alpha)) + 
   theme_light() + 
-  ggtitle(expression(paste(rho[m], " = 5.", 10^-8))) +
+  ggtitle(expression(paste(rho[alpha], " = 5.", 10^-8))) +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
@@ -102,8 +101,8 @@ plot_rhom_chr1 = data_chr1 %>%
     axis.text.y = element_blank(),
     plot.title = element_text(size = 20, hjust = 0.5)) + 
   scale_y_continuous(limits = y_axis_limits) 
-  
 plot_rhom_chr1
+
 plot_chr2 = data_chr2 %>%
   ggplot(aes(x = alpha, y = mean, group = interaction(alpha, label))) +
   geom_point(aes(shape = label, color = factor(alpha)), 
@@ -114,7 +113,7 @@ plot_chr2 = data_chr2 %>%
     values = c(16, 15),  # Shapes for different expressions
     labels = c(
       expression(paste(rho, " = 5.", 10^-8)),
-      expression(paste(rho[m], " = 5.", 10^-8))
+      expression(paste(rho[alpha], " = 5.", 10^-8))
     )
   ) +
   scale_color_manual(values = colors) +
