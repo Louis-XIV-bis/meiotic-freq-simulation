@@ -66,7 +66,7 @@ plot_low_rho_chr1 = data_chr1 %>%
   labs(x = "Sequence position (Mbp)",
        y = expression(pi ~ "along chromosome 1")) + 
   theme_light() + 
-  ggtitle(expression(rho ~ " = 1e-08")) + 
+  ggtitle(expression(paste(rho, " = 1.", 10^-8))) +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
@@ -90,7 +90,7 @@ plot_ctrl_chr1 = data_chr1 %>%
        fill = expression(alpha),
        linetype = expression(alpha)) + 
   theme_light() + 
-  ggtitle(expression(rho ~ " = 5e-08")) + 
+  ggtitle(expression(paste(rho, " = 5.", 10^-8))) +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
@@ -111,7 +111,7 @@ plot_high_rho_chr1 = data_chr1 %>%
   scale_fill_manual(values = colors) +
   labs(x = "Sequence position (Mbp)") +
   theme_light() + 
-  ggtitle(expression(rho ~ " = 1e-07")) + 
+  ggtitle(expression(paste(rho, " = 1.", 10^-7))) +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
@@ -123,16 +123,21 @@ plot_high_rho_chr1 = data_chr1 %>%
   scale_y_continuous(limits = y_axis_limits)
 plot_high_rho_chr1
 
-# Assuming `colors` is a predefined vector of colors
-data_chr2
 plot_chr2 = data_chr2 %>% 
   ggplot(aes(x = alpha, y = mean, group = interaction(alpha, rho))) +
   geom_point(aes(shape = factor(rho), color = factor(alpha)), 
              size = 6, position = position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin = ymin, ymax = ymax, color = factor(alpha)), 
                 width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
-  scale_shape_manual(values = c(15, 16, 17)) +  # Shapes: dot, square, triangle
   scale_color_manual(values = colors) +
+  scale_shape_manual(
+    values = c(15, 16, 17),  # Shapes for different expressions
+    labels = c(
+      expression(paste("1.", 10^-8)),
+      expression(paste("5.", 10^-8)),
+      expression(paste("1.", 10^-7))
+    )
+  ) +
   labs(x = expression(alpha), 
        y = expression("average " ~ pi ~ "(chromosome 2)"), 
        shape = expression(rho), 

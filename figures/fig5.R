@@ -67,7 +67,7 @@ plot_ctrl_chr1 = data_chr1 %>%
   labs(x = "Sequence position (Mbp)",
        y = expression(pi ~ "along chromosome 1")) + 
   theme_light() + 
-  ggtitle(expression(rho ~ "= 5e-8")) +
+  ggtitle(expression(paste(rho, " = 5.", 10^-8))) +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
@@ -78,6 +78,7 @@ plot_ctrl_chr1 = data_chr1 %>%
   guides(color = "none", fill = "none") + 
   scale_y_continuous(limits = y_axis_limits)
 plot_ctrl_chr1
+
 
 plot_rhom_chr1 = data_chr1 %>% 
   filter(rho == '0,00000005') %>% 
@@ -91,7 +92,7 @@ plot_rhom_chr1 = data_chr1 %>%
        fill = expression(alpha),
        linetype = expression(alpha)) + 
   theme_light() + 
-  ggtitle(expression(paste(rho[m]," = 5e-8"))) +
+  ggtitle(expression(paste(rho[m], " = 5.", 10^-8))) +
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_blank(),
@@ -103,19 +104,23 @@ plot_rhom_chr1 = data_chr1 %>%
   scale_y_continuous(limits = y_axis_limits) 
   
 plot_rhom_chr1
-
-# Assuming `colors` is a predefined vector of colors
-plot_chr2 = data_chr2 %>% 
+plot_chr2 = data_chr2 %>%
   ggplot(aes(x = alpha, y = mean, group = interaction(alpha, label))) +
-  geom_point(aes(shape = factor(label), color = factor(alpha)), 
+  geom_point(aes(shape = label, color = factor(alpha)), 
              size = 6, position = position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin = ymin, ymax = ymax, color = factor(alpha)), 
                 width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
-  scale_shape_manual(values = c(16, 15)) +  # Shapes: dot, square, triangle
+  scale_shape_manual(
+    values = c(16, 15),  # Shapes for different expressions
+    labels = c(
+      expression(paste(rho, " = 5.", 10^-8)),
+      expression(paste(rho[m], " = 5.", 10^-8))
+    )
+  ) +
   scale_color_manual(values = colors) +
   labs(x = expression(alpha), 
        y = expression("average " ~ pi ~ "(chromosome 2)"), 
-       shape = "label", 
+       shape = "Recombination rate", 
        color = expression(alpha)) + 
   theme_light() + 
   theme(
@@ -127,9 +132,9 @@ plot_chr2 = data_chr2 %>%
     legend.text = element_text(size = 18)
   ) +
   scale_y_continuous(limits = y_axis_limits) +
-  guides(color = "none")  # Remove legend for `alpha`
+  guides(color = "none")
 
-plot_chr2 
+plot_chr2
 
 # Extract the legend from the main plot
 all_components <- get_plot_component(plot_rhom_chr1, "guide-box", return_all = TRUE)

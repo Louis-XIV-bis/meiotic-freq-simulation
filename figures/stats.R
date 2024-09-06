@@ -238,7 +238,7 @@ data_rho_m = full_dataset %>%
 data_rho_m
 
 check_normality(data_rho, "rho_scaled", "pi")
-# 
+
 # rho_scaled alpha shapiro_p_value is_gaussian
 # <chr>      <fct>           <dbl> <chr>      
 #   1 rho_fixe   0.01       0.00000103 No         
