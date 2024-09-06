@@ -93,7 +93,7 @@ plot_rhom_chr1 = data_chr1 %>%
   theme_light() + 
   ggtitle(expression(paste(rho[alpha], " = 5.", 10^-8))) +
   theme(
-    axis.title.x = element_text(size = 20),
+    axis.title.x = element_text(size = 20 ),
     axis.title.y = element_blank(),
     legend.title = element_text(size = 20),
     legend.text = element_text(size = 20),
@@ -148,7 +148,7 @@ first_row <- plot_grid(
 
 # Second row: plot_chr2 spanning two columns and legend_only in the third column
 second_row <- plot_grid(
-  plot_chr2 + theme(plot.margin = margin(l = 23, t = 23)),
+  plot_chr2 + theme(plot.margin = margin(l = 23, t = 23) ),
   legend_only,
   ncol = 2, rel_widths = c(2.5, 1),
   labels = c("C"), label_size = 20
@@ -163,3 +163,4 @@ combined_plot <- plot_grid(
 combined_plot
 ggsave("fig5.png", plot = combined_plot, width = 16, height = 12, units = "in",bg = "white")
 rm(list=ls())
+
