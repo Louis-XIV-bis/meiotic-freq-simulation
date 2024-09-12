@@ -32,7 +32,7 @@ data_t = read_csv('../../../data/t_merged.csv') %>%
   filter((h == 0.5 & s == 0.05) & (rho == '5e-08' | rho == '0,00000005')) %>% 
   mutate(alpha = as.factor(1 / GR)) %>%
   mutate(ymin = mean - sd, ymax = mean + sd) %>% 
-  mutate(label = case_when(rho == '5e-08' ~ 'rho', rho == '0,00000005' ~ 'rho_m', TRUE ~ 'other'))
+  mutate(label = case_when(rho == '5e-08' ~ 'rho', rho == '0,00000005' ~ 'rho_alpha', TRUE ~ 'other'))
 data_t
 
 ########################################################################
@@ -53,12 +53,16 @@ plot_t = data_t %>%
              size = 6, position = position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin = ymin, ymax = ymax, color = factor(alpha)), 
                 width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
-  scale_shape_manual(values = c(15, 16, 17)) +  # Shapes: dot, square, triangle
+  scale_shape_manual(values = c(15, 16),
+                     labels = c(
+                     expression(paste(rho, " = 5.", 10^-8)),
+                     expression(paste(rho[alpha], " = 5.", 10^-8)))) +  # Shapes: dot, square
   scale_color_manual(values = colors) +
   labs(x = expression(alpha), 
        y = expression("Time to fixation (generations)"), 
-       shape = expression(label), 
-       color = expression(alpha)) + 
+       shape = "Recombination rate", 
+       color = expression(alpha)
+       ) + 
   theme_light() + 
   theme(
     axis.title.x = element_text(size = 20),
@@ -71,4 +75,4 @@ plot_t = data_t %>%
   scale_y_continuous(limits = y_axis_limits)
 plot_t
 
-ggsave("rhofix_timefix.png", plot = plot_t, width = 12, height = 10, units = "in")
+ggsave("rhoalpha_timefix.png", plot = plot_t, width = 12, height = 10, units = "in")
