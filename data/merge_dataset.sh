@@ -2,7 +2,8 @@
 
 # This script will gather all the data from individual experiments into a single one to do the plots for the paper
 
-cp ../ctrl/data/pi_full_chr2_ctrl.csv . # specific for fig2
+cp ../script/neutral/results/pi_neutral.csv . # specific for neutral
+cp ../script/ctrl/results/pi_full_chr2_ctrl.csv . # specific for fig2
 
 # Function to merge CSV files based on a pattern (e.g., "pi" or "t")
 merge_csv_files() {

@@ -83,13 +83,28 @@ perform_tests <- function(data, group_var, value_var, group_col) {
 ########################################################################
 # Statistical tests 
 
+###### Fig 1 ###########################################################
+
+data_neutral = read_csv('../data/pi_neutral.csv') %>%
+  mutate(alpha = as.factor(1 / GR)) 
+
+pi_neutral_alpha_1 <- data_neutral %>% filter(alpha == 1) %>% pull(mean)
+shapiro.test(pi_neutral_alpha_1) #  p-value = 0.759 ==> gaussian
+
+pi_neutral_alpha_0.01 <- data_neutral %>% filter(alpha == 0.01) %>% pull(mean)
+shapiro.test(pi_neutral_alpha_0.01) #  p-value = 0.768 ==> gaussian
+
+t.test(pi_neutral_alpha_1, pi_neutral_alpha_0.01, alternative = "less")
+# p-value = 0.0001139 ==> pi alpha 1 < pi alpha 0.01
+
+4.007228e-5 / 4.115257e-5
 ###### Fig 2 ###########################################################
+
 
 ### pi chr 2 alpha = 0.01 vs alpha == 1 ###
 data_fig2 = full_dataset %>% 
   filter(s == 0.05 & rho == '5e-08' & rho_scaled != 'rho_fixe', h == 0.5 & (alpha == 1 | alpha == 0.01)) 
 data_fig2
-
 check_normality(data_fig2, "window", "pi")
 # window alpha shapiro_p_value is_gaussian
 # <chr>  <fct>           <dbl> <chr>      
@@ -98,8 +113,10 @@ check_normality(data_fig2, "window", "pi")
 
 # non parametric test to be exact because only 1 gaussian 
 pi_alpha_1 <- data_fig2 %>% filter(alpha == 1) %>% pull(pi)
+mean(pi_alpha_1)
 pi_alpha_0.01 <- data_fig2 %>% filter(alpha == 0.01) %>% pull(pi)
-wilcox.test(pi_alpha_1, pi_alpha_0.01)
+mean(pi_alpha_0.01)
+wilcox.test(pi_alpha_1, pi_alpha_0.01, alternative = "less")
 # p-value < 2.2e-16 ==> pi_alpha=1 != pi_alpha=0.01
 
 ### T chr 2 alpha = 0.01 vs alpha == 1 ###
@@ -280,8 +297,7 @@ perform_tests(data_rho_m, group_var = "alpha", value_var = "t", group_col = "rho
 perform_tests(data_rho_m, group_var = "rho_scaled", value_var = "t", group_col = "alpha")
 
 
-
-###### Fig 4 ######################
+###### Fig 6 ######################
 
 ### Compare pi for a given rho for each alpha and the opposite ###
 data_h = full_dataset %>%

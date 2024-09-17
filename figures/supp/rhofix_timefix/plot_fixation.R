@@ -53,7 +53,7 @@ plot_t = data_t %>%
              size = 6, position = position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin = ymin, ymax = ymax, color = factor(alpha)), 
                 width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
-  scale_shape_manual(values = c(15, 16),
+  scale_shape_manual(values = c(16, 15),
                      labels = c(
                      expression(paste(rho, " = 5.", 10^-8)),
                      expression(paste(rho[alpha], " = 5.", 10^-8)))) +  # Shapes: dot, square
