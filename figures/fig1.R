@@ -98,7 +98,7 @@ combined_plot <- plot_grid(pi_neutral, pi_ctrl + theme(plot.margin = margin(l = 
                            label_size = 20,
                            ncol = 2,
                            align = "h",  # Horizontal alignment
-                           rel_widths = c(1, 1.3)  # Adjust relative widths to account for the legend
+                           rel_widths = c(1, 1)  # Adjust relative widths to account for the legend
 )
 combined_plot
 
