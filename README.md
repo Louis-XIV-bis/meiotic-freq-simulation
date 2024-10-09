@@ -61,7 +61,7 @@ Makes your changes (the parameters in sln_model.sh, changing some parameters in 
 ```
 cd scripts/
 mkdir low_mu
-cp template/* low_mu/
+cp -r template/* low_mu/
 cd low_mu/
 nano sln_model.sh # change mu=1e-8 to 1e-7 for instance
 sbatch sln_model.sh
