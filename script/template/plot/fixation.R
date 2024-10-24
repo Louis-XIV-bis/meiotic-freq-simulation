@@ -6,6 +6,8 @@
 
 ###### Package initialization  ----------------------------------------
 
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
 if (!require('ggplot2', quietly = T)) install.packages('ggplot2');
 if (!require('sjPlot', quietly = T)) install.packages('sjPlot');
 if (!require('RColorBrewer', quietly = T)) install.packages('RColorBrewer');
