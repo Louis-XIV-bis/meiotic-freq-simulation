@@ -27,7 +27,7 @@ library(cowplot)
 
 rm(list=ls())
 
-# Subset data for ctrl and neutral condition
+# Subset data for chr1
 data_chr1 = read_csv('../data/pi_merged.csv') %>%
   filter(h == 0.5 & rho == '5e-08' & s > 0) %>% 
   mutate(alpha = as.factor(1 / GR)) %>%
@@ -36,7 +36,7 @@ data_chr1 = read_csv('../data/pi_merged.csv') %>%
   mutate(window = as.numeric(window) / 1000000)
 data_chr1
 
-# Subset data for ctrl and neutral condition
+# Subset data for chr2
 data_chr2 = read_csv('../data/pi_merged.csv') %>%
   filter(window == 'chr2') %>% 
   filter(h == 0.5 & rho == '5e-08' & s > 0) %>% 

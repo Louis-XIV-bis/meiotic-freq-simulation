@@ -31,6 +31,8 @@ done
 
 python pi_files.py $exp_name
 python t_files.py $exp_name
+python full_dataset_t_pichr2.py $exp_name
+
 Rscript ../template/plot/pi.R ${exp_name}
 Rscript ../template/plot/fixation.R ${exp_name}
 
