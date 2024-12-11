@@ -137,11 +137,15 @@ rm(pi_alpha_1, pi_alpha_0.01, t_alpha_1, t_alpha_0.01, data_fig2)
 
 ###### Fig 3 ######################
 
-### Compare pi for a given s for each alpha and the opposite ###
+### Compare pi / pi0 for a given s for each alpha and the opposite ###
 data_s = full_dataset %>%
-  filter(rho == '5e-08' & rho_scaled != 'rho_fixe', h == 0.5)
+  filter(rho == '5e-08' & rho_scaled != 'rho_fixe', h == 0.5) %>%
+  group_by(s) %>%
+  mutate(pi_normalized = pi / mean(pi[alpha == 1], na.rm = TRUE)) %>%
+  ungroup()
+data_s
 
-check_normality(data_s, "s", "pi")
+check_normality(data_s, "s", "pi_normalized")
 
 # s alpha shapiro_p_value is_gaussian
 # <dbl> <fct>           <dbl> <chr>      
@@ -161,10 +165,10 @@ check_normality(data_s, "s", "pi")
 # Will do kruskal walis and dunn.test because not all of them are gaussian 
 
 # Compare pi for each alpha for a given s  
-perform_tests(data_s, group_var = "alpha", value_var = "pi", group_col = "s") 
+perform_tests(data_s, group_var = "alpha", value_var = "pi_normalized", group_col = "s") 
 
 # Compare pi for each s for a given alpha 
-perform_tests(data_s, group_var = "s", value_var = "pi", group_col = "alpha")
+perform_tests(data_s, group_var = "s", value_var = "pi_normalized", group_col = "alpha")
 
 ### Compare t for a given s for each alpha and the opposite ###
 check_normality(data_s, "s", "t")
@@ -195,9 +199,12 @@ perform_tests(data_s, group_var = "s", value_var = "t", group_col = "alpha")
 
 ### Compare pi for a given rho for each alpha and the opposite ###
 data_rho = full_dataset %>%
-  filter(s ==  0.05 & rho_scaled != 'rho_fixe', h == 0.5)
+  filter(s ==  0.05 & rho_scaled != 'rho_fixe', h == 0.5) %>%
+  group_by(rho) %>%
+  mutate(pi_normalized = pi / mean(pi[alpha == 1], na.rm = TRUE)) %>%
+  ungroup()
 
-check_normality(data_rho, "rho", "pi")
+check_normality(data_rho, "rho", "pi_normalized")
 
 # rho alpha shapiro_p_value is_gaussian
 # <dbl> <fct>           <dbl> <chr>      
@@ -217,10 +224,10 @@ check_normality(data_rho, "rho", "pi")
 # Will do kruskal walis and dunn.test because not all of them are gaussian 
 
 # Compare pi for each alpha for a given rho  
-perform_tests(data_rho, group_var = "alpha", value_var = "pi", group_col = "rho") 
+perform_tests(data_rho, group_var = "alpha", value_var = "pi_normalized", group_col = "rho") 
 
 # Compare pi for each rho for a given alpha 
-perform_tests(data_rho, group_var = "rho", value_var = "pi", group_col = "alpha")
+perform_tests(data_rho, group_var = "rho", value_var = "pi_normalized", group_col = "alpha")
 
 ### Compare t for a given rho for each alpha and the opposite ###
 check_normality(data_rho, "rho", "t")
@@ -251,14 +258,17 @@ perform_tests(data_rho, group_var = "rho", value_var = "t", group_col = "alpha")
 ### Compare pi for a given rho_var for each alpha and the opposite ###
 data_rho_m = full_dataset %>%
   filter((h == 0.5 & s == 0.05) & (rho == '5e-08' | rho_scaled == 'rho_fixe')) %>% 
-  mutate(rho_scaled = case_when(rho_scaled == 'rho_fixe' ~ 'rho_fixe', TRUE ~ 'rho_var'))
+  mutate(rho_scaled = case_when(rho_scaled == 'rho_fixe' ~ 'rho_fixe', TRUE ~ 'rho_var')) %>%
+  group_by(rho_scaled) %>%
+  mutate(pi_normalized = pi / mean(pi[alpha == 1], na.rm = TRUE)) %>%
+  ungroup()
 data_rho_m
 
-check_normality(data_rho, "rho_scaled", "pi")
+check_normality(data_rho_m, "rho_scaled", "pi_normalized")
 
 # rho_scaled alpha shapiro_p_value is_gaussian
 # <chr>      <fct>           <dbl> <chr>      
-#   1 rho_fixe   0.01       0.00000103 No         
+# 1 rho_fixe   0.01       0.00000103 No         
 # 2 rho_fixe   0.02       0.00152    No         
 # 3 rho_fixe   0.1        0.574      Yes        
 # 4 rho_fixe   1          0.213      Yes        
@@ -270,10 +280,10 @@ check_normality(data_rho, "rho_scaled", "pi")
 # Will do kruskal walis and dunn.test because not all of them are gaussian 
 
 # Compare pi for each alpha for a given rho_scaled  
-perform_tests(data_rho_m, group_var = "alpha", value_var = "pi", group_col = "rho_scaled") 
+perform_tests(data_rho_m, group_var = "alpha", value_var = "pi_normalized", group_col = "rho_scaled") 
 
 # Compare pi for each rho_scaled for a given alpha 
-perform_tests(data_rho_m, group_var = "rho_scaled", value_var = "pi", group_col = "alpha")
+perform_tests(data_rho_m, group_var = "rho_scaled", value_var = "pi_normalized", group_col = "alpha")
 
 ### Compare t for a given rho for each alpha and the opposite ###
 check_normality(data_rho_m, "rho_scaled", "t")
@@ -301,9 +311,12 @@ perform_tests(data_rho_m, group_var = "rho_scaled", value_var = "t", group_col =
 
 ### Compare pi for a given rho for each alpha and the opposite ###
 data_h = full_dataset %>%
-  filter(s ==  0.05 & rho_scaled != 'rho_fixe' & rho == '5e-08')
-
-check_normality(data_h, "h", "pi")
+  filter(s ==  0.05 & rho_scaled != 'rho_fixe' & rho == '5e-08') %>%
+  group_by(h) %>%
+  mutate(pi_normalized = pi / mean(pi[alpha == 1], na.rm = TRUE)) %>%
+  ungroup()
+data_h
+check_normality(data_h, "h", "pi_normalized")
 
 # h alpha shapiro_p_value is_gaussian
 # <dbl> <fct>           <dbl> <chr>      
@@ -323,10 +336,10 @@ check_normality(data_h, "h", "pi")
 # Will do kruskal walis and dunn.test because not all of them are gaussian 
 
 # Compare pi for each alpha for a given h  
-perform_tests(data_h, group_var = "alpha", value_var = "pi", group_col = "h") 
+perform_tests(data_h, group_var = "alpha", value_var = "pi_normalized", group_col = "h") 
 
 # Compare pi for each h for a given alpha 
-perform_tests(data_h, group_var = "h", value_var = "pi", group_col = "alpha")
+perform_tests(data_h, group_var = "h", value_var = "pi_normalized", group_col = "alpha")
 
 ### Compare t for a given h for each alpha and the opposite ###
 check_normality(data_h, "h", "t")
