@@ -31,7 +31,6 @@ rm(list=ls())
 data_chr1 = read_csv('../data/pi_merged.csv') %>%
   filter(h == 0.5 & rho == '5e-08' & s > 0) %>% 
   mutate(alpha = as.factor(1 / GR)) %>%
-  mutate(ymin = mean - sd, ymax = mean + sd) %>% 
   filter(window != 'chr2') %>% 
   mutate(window = as.numeric(window) / 1000000)
 data_chr1
@@ -40,15 +39,47 @@ data_chr1
 data_chr2 = read_csv('../data/pi_merged.csv') %>%
   filter(window == 'chr2') %>% 
   filter(h == 0.5 & rho == '5e-08' & s > 0) %>% 
-  mutate(alpha = as.factor(1 / GR)) %>%
-  mutate(ymin = mean - sd, ymax = mean + sd)  
+  mutate(alpha = as.factor(1 / GR))
 data_chr2
+
+# Compute pi/pi0(chr2) for each condition 
+mean_s002 <- data_chr2 %>% filter(alpha == 1, s == 0.02) %>% pull(mean)
+mean_s005 <- data_chr2 %>% filter(alpha == 1, s == 0.05) %>% pull(mean)
+mean_s01 <- data_chr2 %>% filter(alpha == 1, s == 0.1) %>% pull(mean)
+
+data_chr2 = data_chr2 %>% 
+  mutate(mean_normalized = case_when(
+    s == 0.02 ~ mean / mean_s002,  # For s = 0.02, divide by mean_s1
+    s == 0.05 ~ mean / mean_s005,  # For s = 0.05, divide by mean_s2
+    s == 0.1  ~ mean / mean_s01   # For s = 0.1, divide by mean_s3
+  ),
+  sd_normalized = case_when(
+    s == 0.02 ~ sd / mean_s002,  # For s = 0.02, divide by mean_s1
+    s == 0.05 ~ sd / mean_s005,  # For s = 0.05, divide by mean_s2
+    s == 0.1  ~ sd / mean_s01   # For s = 0.1, divide by mean_s3
+  ))
+data_chr2
+
+data_chr1 <- data_chr1 %>%
+  mutate(
+    mean_normalized = case_when(
+      s == 0.02 ~ mean / mean_s002,  # For s = 0.02, divide by mean_s1
+      s == 0.05 ~ mean / mean_s005,  # For s = 0.05, divide by mean_s2
+      s == 0.1  ~ mean / mean_s01   # For s = 0.1, divide by mean_s3
+    ),
+    sd_normalized = case_when(
+      s == 0.02 ~ sd / mean_s002,  # For s = 0.02, divide by mean_s1
+      s == 0.05 ~ sd / mean_s005,  # For s = 0.05, divide by mean_s2
+      s == 0.1  ~ sd / mean_s01   # For s = 0.1, divide by mean_s3
+    ) 
+  )
+data_chr1
 
 ########################################################################
 # Create plots individually #
 
 # Explicitly set the y-axis limits to be the same for both plots
-y_axis_limits <- c(-1e-5, 8e-05)
+y_axis_limits <- c(-0.1, 1.9)
 
 # Create color palette 
 num_conditions <- length(unique(data_chr1$alpha))
@@ -58,30 +89,30 @@ colors <- brewer.pal(n = num_conditions, name = palette_name)
 # Using the extracted color palette for both geom_line and geom_ribbon
 plot_low_s_chr1 = data_chr1 %>%
   filter(s == 0.02) %>% 
-  ggplot(aes(x = window, y = mean, group = alpha)) +
-  geom_ribbon(aes(ymin = ymin, ymax = ymax, fill = alpha), alpha = 0.2) +
+  ggplot(aes(x = window, y = mean_normalized, group = alpha)) +
+  geom_ribbon(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, fill = alpha), alpha = 0.2) +
   geom_line(aes(color = alpha)) +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
   labs(x = "Sequence position (Mbp)",
-       y = expression(pi ~ "along chromosome 1")) + 
+       y = expression(pi ~ "/" ~ pi[0] ~ "(chromosome 1)")) + 
   theme_light() + 
   ggtitle("s = 0.02") + 
   theme(
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
     axis.text.x = element_text(size = 17),
-    axis.text.y = element_text(size = 18),
+    axis.text.y = element_text(size = 16),
     plot.title = element_text(size = 20, hjust = 0.5)
   ) +
-  guides(color = "none", fill = "none") + 
+  guides(color = "none", fill = "none")  +
   scale_y_continuous(limits = y_axis_limits)
 plot_low_s_chr1
 
 plot_ctrl_chr1 = data_chr1 %>% 
   filter(s == 0.05) %>% 
-  ggplot(aes(x = window, y = mean, group = alpha)) +
-  geom_ribbon(aes(ymin = ymin, ymax = ymax, fill = alpha), alpha = 0.2) +
+  ggplot(aes(x = window, y = mean_normalized, group = alpha)) +
+  geom_ribbon(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, fill = alpha), alpha = 0.2) +
   geom_line(aes(color = alpha)) +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
@@ -104,8 +135,8 @@ plot_ctrl_chr1
 
 plot_high_s_chr1 = data_chr1 %>% 
   filter(s == 0.1) %>%
-  ggplot(aes(x = window, y = mean, group = alpha)) +
-  geom_ribbon(aes(ymin = ymin, ymax = ymax, fill = alpha), alpha = 0.2) +
+  ggplot(aes(x = window, y = mean_normalized, group = alpha)) +
+  geom_ribbon(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, fill = alpha), alpha = 0.2) +
   geom_line(aes(color = alpha)) +
   scale_color_manual(values = colors) +
   scale_fill_manual(values = colors) +
@@ -125,15 +156,15 @@ plot_high_s_chr1
 
 # Assuming `colors` is a predefined vector of colors
 plot_chr2 = data_chr2 %>% 
-  ggplot(aes(x = alpha, y = mean, group = interaction(alpha, s))) +
+  ggplot(aes(x = alpha, y = mean_normalized, group = interaction(alpha, s))) +
   geom_point(aes(shape = factor(s), color = factor(alpha)), 
              size = 6, position = position_dodge(width = 0.5)) +
-  geom_errorbar(aes(ymin = ymin, ymax = ymax, color = factor(alpha)), 
+  geom_errorbar(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, color = factor(alpha)), 
                 width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
   scale_shape_manual(values = c(15, 16, 17)) +  # Shapes: dot, square, triangle
   scale_color_manual(values = colors) +
   labs(x = expression(alpha), 
-       y = expression("average " ~ pi ~ "(chromosome 2)"), 
+       y = expression("average" ~ pi ~ "/" ~ pi[0] ~ "(chromosome 2)"), 
        shape = "s", 
        color = expression(alpha)) + 
   theme_light() + 
@@ -141,13 +172,12 @@ plot_chr2 = data_chr2 %>%
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
     axis.text.x = element_text(size = 17),
-    axis.text.y = element_text(size = 18),
+    axis.text.y = element_text(size = 16),
     legend.title = element_text(size = 20),
     legend.text = element_text(size = 18)
   ) +
   scale_y_continuous(limits = y_axis_limits) +
   guides(color = "none")  # Remove legend for `alpha`
-
 plot_chr2 
 
 # Extract the legend from the main plot
@@ -178,4 +208,5 @@ combined_plot <- plot_grid(
 )
 combined_plot
 ggsave("fig3.png", plot = combined_plot, width = 16, height = 12, units = "in",bg = "white")
+
 rm(list=ls())

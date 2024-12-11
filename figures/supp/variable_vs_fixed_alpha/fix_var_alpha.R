@@ -117,6 +117,6 @@ plot = ggdraw() +
   draw_text("Variable intervals", x = 0.71, y = 0.92, size = 18, color = "black")
 plot
 
-ggsave("fix_var_alpha.png", plot = combined_plot, width = 16, height = 6, units = "in")
+ggsave("fix_var_alpha.png", plot = plot, width = 16, height = 6, units = "in")
 
 rm(list=ls())
