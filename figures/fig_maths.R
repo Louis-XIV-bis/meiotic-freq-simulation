@@ -99,7 +99,7 @@ theory_data <- do.call(rbind, lapply(alpha_values, function(alpha) {
 # Filter observed data to match alpha values of interest
 observed_data <- data_chr1 %>% 
   filter(alpha %in% c(0.01, 0.004)) %>% 
-  mutate(dataset = "Observed", pi_pi0 = mean_normalized) # Rename mean_normalized to pi_pi0
+  mutate(dataset = "Simulated", pi_pi0 = mean_normalized) # Rename mean_normalized to pi_pi0
 
 # Combine theoretical and observed data
 combined_data <- bind_rows(theory_data, observed_data)
