@@ -13,6 +13,7 @@ if (!require('dplyr', quietly = T)) install.packages('dplyr');
 if (!require('sjPlot', quietly = T)) install.packages('sjPlot');
 if (!require('RColorBrewer', quietly = T)) install.packages('RColorBrewer');
 if (!require('cowplot', quietly = T)) install.packages('cowplot');
+if (!require('patchwork', quietly = T)) install.packages('patchwork');
 
 library(ggplot2)
 library(readr)
@@ -21,6 +22,7 @@ library(dplyr)
 library(sjPlot)
 library(RColorBrewer)
 library(cowplot)
+library(patchwork)
 
 ########################################################################
 # Function that upload and format the data
@@ -119,10 +121,6 @@ combined_data = combined_data %>%
   filter(alpha == 1)
 combined_data
 
-# Plot
-library(ggplot2)
-library(dplyr)
-
 theo_vs_simu <- ggplot(combined_data, aes(x = window, y = mean_normalized, color = origin, shape = origin, group = origin)) +
   # Add grey band for chr2 (window 1.1 - 1.2)
   annotate("rect", xmin = 1.05, xmax = 1.25, ymin = -Inf, ymax = Inf, 
@@ -186,7 +184,6 @@ theo_simu_chr2 = ggplot(data_plot_alpha, aes(x = alpha, y = mean_normalized, col
 
 theo_simu_chr2
 
-library(patchwork)
 # Label the plots as A and B
 final_plot <- (theo_vs_simu / theo_simu_chr2) + 
   plot_annotation(tag_levels = "A")  # This automatically adds "A" and "B" labels
