@@ -26,7 +26,7 @@ library(RColorBrewer)
 input_string = "maths"
 
 # Function that upload and format the data
-data = read.csv(paste0("../scripts/results/pi_", input_string, ".csv"))
+data = read.csv(paste0("../script/", input_string, "/results/pi_", input_string, ".csv"))
 
 # Add the alpha column
 data = data %>% tibble() %>%
@@ -74,10 +74,10 @@ h <- 0.5
 # Define the function to calculate pi_pi0
 calculate_pi_pi0 <- function(r, alpha) {
   gamma <- 2 * N * h * s
-  Ts1 <- 2 * (1 / gamma) * (log(gamma) + 0.5772) # Ts1 calculation
+  Ts1 <- 2 * (1 / gamma) * (log(log(gamma) + 0.5772)) # Ts1 calculation
   ts1 <- Ts1 * 2 * N
-  Ts2 <- (1 / (2 * N * s)) * log(6 * N * s) # Ts2 calculation
-  Tsm2 <- (1 / (2 * N * s)) * (log(2 * N * s) + log(2 * N * h * s) - 0.5 * (1 / alpha) * h * s) # Tsm2 calculation
+  Ts2 <- (1 / (2 * N * (1-h) * s)) * log(4 * N * (1 -h) * s) # Ts2 calculation
+  Tsm2 <- (1 / (2 * N * (1-h) * s)) * (log(log(2 * N * (1 - h) * s)) + log(log(2 * N * h * s)) - 0.5 * (1 / alpha) * h * s) # Tsm2 calculation
   
   # Equation for pi_pi0
   2 * r * (1 - r) + 1 / (2 * N * alpha) + alpha * ts1 * Tsm2 + (1 - alpha * ts1) * (Ts1 + Ts2)
@@ -106,15 +106,23 @@ combined_data <- bind_rows(theory_data, observed_data)
 
 # Plot the data
 pi_pi0 = ggplot(combined_data, aes(x = r, y = pi_pi0, color = alpha, linetype = dataset, group = interaction(alpha, dataset))) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   labs(
     x = "r",
-    y = expression("average" ~ pi ~ "/" ~ pi[0] ~ "(chr2)"),
+    y = expression("average" ~ pi ~ "/" ~ pi[0] ~ "(chromosome 1)"),
     color = expression(alpha),
     linetype = "Dataset"
   ) +
   theme_light() +
-  theme(legend.position = "bottom")
+  theme(
+    legend.position = "bottom",
+    text = element_text(size = 16),          # Increase overall text size
+    axis.title = element_text(size = 18),    # Increase axis title size
+    axis.text = element_text(size = 16),     # Increase axis tick label size
+    legend.text = element_text(size = 16),   # Increase legend text size
+    legend.title = element_text(size = 18)   # Increase legend title size
+  )
+pi_pi0
 
-ggsave("fig_maths.png", plot = pi_pi0, width = 10, height = 6) 
+ggsave("fig4.png", plot = pi_pi0, width = 10, height = 6) 
 

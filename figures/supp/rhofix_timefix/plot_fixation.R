@@ -75,4 +75,4 @@ plot_t = data_t %>%
   scale_y_continuous(limits = y_axis_limits)
 plot_t
 
-ggsave("rhoalpha_timefix.png", plot = plot_t, width = 12, height = 10, units = "in")
+ggsave("figS8.png", plot = plot_t, width = 12, height = 10, units = "in")

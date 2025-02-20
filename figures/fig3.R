@@ -27,11 +27,10 @@ library(cowplot)
 
 rm(list=ls())
 
-# Subset data for chr1
 data_chr1 = read_csv('../data/pi_merged.csv') %>%
   filter(h == 0.5 & rho == '5e-08' & s > 0) %>% 
   mutate(alpha = as.factor(1 / GR)) %>%
-  filter(window != 'chr2') %>% 
+  filter(window != 'chr2') %>%
   mutate(window = as.numeric(window) / 1000000)
 data_chr1
 
@@ -58,6 +57,8 @@ data_chr2 = data_chr2 %>%
     s == 0.05 ~ sd / mean_s005,  # For s = 0.05, divide by mean_s2
     s == 0.1  ~ sd / mean_s01   # For s = 0.1, divide by mean_s3
   ))
+data_chr2 = data_chr2 %>% select(-c(GR, rho, rho_scaled, mean, sd, sd_normalized))
+data_chr2$origin <- "simulation"
 data_chr2
 
 data_chr1 <- data_chr1 %>%
@@ -73,140 +74,123 @@ data_chr1 <- data_chr1 %>%
       s == 0.1  ~ sd / mean_s01   # For s = 0.1, divide by mean_s3
     ) 
   )
+data_chr1 = data_chr1 %>% select(-c(GR, rho, rho_scaled, mean, sd, sd_normalized))
+data_chr1$origin <- "simulation"
 data_chr1
 
-########################################################################
-# Create plots individually #
+# Read the data from file
+data2 <- read_csv("../data/fig3_theoretical.csv") %>% as_tibble()
+data2_chr1 = data2 %>%
+  filter(window != 'chr2') %>% as_tibble() %>%
+  mutate(h = 0.5, mean_normalized = pi.pi0) %>% 
+  select(-pi.pi0)
+data2_chr1$window = as.numeric(data2_chr1$window) 
+data2_chr1$origin <- "theory"
 
-# Explicitly set the y-axis limits to be the same for both plots
-y_axis_limits <- c(-0.1, 1.9)
+data2_chr1 = data2_chr1 %>% 
+  mutate(window = window + 0.5)
+data2_chr1
 
-# Create color palette 
-num_conditions <- length(unique(data_chr1$alpha))
-palette_name <- "Dark2"
-colors <- brewer.pal(n = num_conditions, name = palette_name)
+data2_chr2 = data2 %>%
+  filter(window == 'chr2') %>% as_tibble() %>%
+  mutate(h = 0.5, mean_normalized = pi.pi0) %>% 
+  select(-pi.pi0)
+data2_chr2$origin <- "theory"
+data2_chr2
 
-# Using the extracted color palette for both geom_line and geom_ribbon
-plot_low_s_chr1 = data_chr1 %>%
-  filter(s == 0.02) %>% 
-  ggplot(aes(x = window, y = mean_normalized, group = alpha)) +
-  geom_ribbon(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, fill = alpha), alpha = 0.2) +
-  geom_line(aes(color = alpha)) +
-  scale_color_manual(values = colors) +
-  scale_fill_manual(values = colors) +
+############## 
+
+chr1 = rbind(data_chr1, data2_chr1) 
+chr1 = chr1 %>%
+  filter(!is.na(mean_normalized), window > 0.5) 
+chr1
+
+data_chr2 = data_chr2 %>% mutate(window = 1.1)
+data2_chr2 = data2_chr2 %>% mutate(window = 1.2)
+chr2 = rbind(data_chr2, data2_chr2)
+chr2 = chr2 %>%
+  filter(!is.na(mean_normalized))
+chr2
+
+###########################  
+# Combine datasets
+combined_data <- bind_rows(chr1, chr2)
+combined_data = combined_data %>%
+  filter(alpha == 1)
+combined_data
+
+# Plot
+library(ggplot2)
+library(dplyr)
+
+theo_vs_simu <- ggplot(combined_data, aes(x = window, y = mean_normalized, color = origin, shape = origin, group = origin)) +
+  # Add grey band for chr2 (window 1.1 - 1.2)
+  annotate("rect", xmin = 1.05, xmax = 1.25, ymin = -Inf, ymax = Inf, 
+           fill = "grey80", alpha = 0.5) +  
+  geom_line(data = combined_data %>% filter(!window %in% c(1.1, 1.2)), size = 1) +  # Line plot for most data
+  geom_point(data = combined_data %>% filter(window %in% c(1.1, 1.2)), size = 4) +  # Points for special windows
+  facet_grid(~s, scales = "free_x", labeller = labeller(s = function(x) paste0("s = ", x))) +  # Custom facet labels
+  scale_x_continuous(
+    breaks = c(seq(0, 1, by = 0.2), 1.15),  
+    labels = c(as.character(seq(0, 1, by = 0.2)), "chr2")  
+  ) +
   labs(x = "Sequence position (Mbp)",
-       y = expression(pi ~ "/" ~ pi[0] ~ "(chromosome 1)")) + 
-  theme_light() + 
-  ggtitle("s = 0.02") + 
+       y = expression(pi ~ "/" ~ pi[0]),
+       color = "Origin",
+       shape = "Origin") +  # Make sure both aesthetics have the same title
+  theme_minimal() +
   theme(
-    axis.title.x = element_text(size = 20),
-    axis.title.y = element_text(size = 20),
-    axis.text.x = element_text(size = 17),
-    axis.text.y = element_text(size = 16),
-    plot.title = element_text(size = 20, hjust = 0.5)
+    legend.title = element_blank(),  
+    text = element_text(size = 16),  
+    axis.title = element_text(size = 18),  
+    axis.text = element_text(size = 14),  
+    strip.text = element_text(size = 16, face = "bold"),  
+    legend.text = element_text(size = 14),
+    legend.position = "bottom"
   ) +
-  guides(color = "none", fill = "none")  +
-  scale_y_continuous(limits = y_axis_limits)
-plot_low_s_chr1
+  guides(
+    color = guide_legend(override.aes = list(shape = c(16, 17))),  # Ensure different shapes are in the legend
+    shape = guide_legend(override.aes = list(color = c("#F8766D", "#00BFC4")))  # Ensure correct colors for shapes
+  )
 
-plot_ctrl_chr1 = data_chr1 %>% 
-  filter(s == 0.05) %>% 
-  ggplot(aes(x = window, y = mean_normalized, group = alpha)) +
-  geom_ribbon(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, fill = alpha), alpha = 0.2) +
-  geom_line(aes(color = alpha)) +
-  scale_color_manual(values = colors) +
-  scale_fill_manual(values = colors) +
-  labs(x = "Sequence position (Mbp)",
-       color = expression(alpha),
-       fill = expression(alpha),
-       linetype = expression(alpha)) + 
-  theme_light() + 
-  ggtitle("s = 0.05") + 
+theo_vs_simu
+
+#############
+data_plot_alpha_1 = data_chr2 %>%
+  filter(alpha != 1)
+
+data_plot_alpha_2 = data2_chr2 %>%
+  filter(alpha != 1)
+
+data_plot_alpha = rbind(data_plot_alpha_1, data_plot_alpha_2)
+data_plot_alpha
+
+theo_simu_chr2 = ggplot(data_plot_alpha, aes(x = alpha, y = mean_normalized, color = origin)) +
+  geom_point(aes(shape = origin), size = 5, alpha = 0.8) +  # Different shapes for origin
+  facet_grid(~s, labeller = labeller(s = function(x) paste0("s = ", x))) +  # Facet per s
+  labs(x = expression(alpha), y = expression(pi ~ "/" ~ pi[0] ~ "(chromosome 2)"), 
+       color = "Origin", shape = "Origin") +
+  theme_minimal() +
   theme(
-    axis.title.x = element_text(size = 20),
-    axis.title.y = element_blank(),
-    legend.title = element_text(size = 20),
-    legend.text = element_text(size = 20),
-    axis.text.x = element_text(size = 17),
-    axis.text.y = element_blank(),
-    plot.title = element_text(size = 20, hjust = 0.5)) + 
-  scale_y_continuous(limits = y_axis_limits)
-plot_ctrl_chr1
+    legend.title = element_blank(),  # Remove legend title
+    text = element_text(size = 16),
+    axis.title = element_text(size = 18),
+    axis.text = element_text(size = 14),
+    strip.text = element_text(size = 16, face = "bold"),
+    legend.position = "none",
+    
+    # Add separation lines between facets
+    panel.spacing = unit(0.8, "lines"),  # Adjust spacing between facets
+    panel.border = element_rect(color = "grey80", fill = NA, linewidth = 0.5)  # Thin black border around each facet
+  )
 
-plot_high_s_chr1 = data_chr1 %>% 
-  filter(s == 0.1) %>%
-  ggplot(aes(x = window, y = mean_normalized, group = alpha)) +
-  geom_ribbon(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, fill = alpha), alpha = 0.2) +
-  geom_line(aes(color = alpha)) +
-  scale_color_manual(values = colors) +
-  scale_fill_manual(values = colors) +
-  labs(x = "Sequence position (Mbp)") +
-  theme_light() + 
-  ggtitle("s = 0.1") +
-  theme(
-    axis.title.x = element_text(size = 20),
-    axis.title.y = element_blank(),
-    axis.text.x = element_text(size = 17),
-    axis.text.y = element_blank(), 
-    plot.title = element_text(size = 20, hjust = 0.5)
-  ) +
-  guides(color = "none", fill = "none") + 
-  scale_y_continuous(limits = y_axis_limits)
-plot_high_s_chr1
+theo_simu_chr2
 
-# Assuming `colors` is a predefined vector of colors
-plot_chr2 = data_chr2 %>% 
-  ggplot(aes(x = alpha, y = mean_normalized, group = interaction(alpha, s))) +
-  geom_point(aes(shape = factor(s), color = factor(alpha)), 
-             size = 6, position = position_dodge(width = 0.5)) +
-  geom_errorbar(aes(ymin = mean_normalized - sd_normalized, ymax = mean_normalized + sd_normalized, color = factor(alpha)), 
-                width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
-  scale_shape_manual(values = c(15, 16, 17)) +  # Shapes: dot, square, triangle
-  scale_color_manual(values = colors) +
-  labs(x = expression(alpha), 
-       y = expression("average" ~ pi ~ "/" ~ pi[0] ~ "(chromosome 2)"), 
-       shape = "s", 
-       color = expression(alpha)) + 
-  theme_light() + 
-  theme(
-    axis.title.x = element_text(size = 20),
-    axis.title.y = element_text(size = 20),
-    axis.text.x = element_text(size = 17),
-    axis.text.y = element_text(size = 16),
-    legend.title = element_text(size = 20),
-    legend.text = element_text(size = 18)
-  ) +
-  scale_y_continuous(limits = y_axis_limits) +
-  guides(color = "none")  # Remove legend for `alpha`
-plot_chr2 
+library(patchwork)
+# Label the plots as A and B
+final_plot <- (theo_vs_simu / theo_simu_chr2) + 
+  plot_annotation(tag_levels = "A")  # This automatically adds "A" and "B" labels
 
-# Extract the legend from the main plot
-all_components <- get_plot_component(plot_ctrl_chr1, "guide-box", return_all = TRUE)
-legend_only <- all_components[[1]]  # Adjust the index if needed
+final_plot
 
-# First row: 3 plots with the same relative widths
-first_row <- plot_grid(
-  plot_low_s_chr1 + theme(plot.margin = margin(l = 23)),
-  plot_ctrl_chr1 + theme(legend.position = "none", plot.margin = margin(l = 23)),
-  plot_high_s_chr1 + theme(plot.margin = margin(l = 23)),
-  ncol = 3, rel_widths = c(1.2, 1, 1), labels = c("A", "B", "C"), label_size = 20
-)
-
-# Second row: plot_chr2 spanning two columns and legend_only in the third column
-second_row <- plot_grid(
-  plot_chr2 + theme(plot.margin = margin(l = 23, t = 23)),
-  legend_only,
-  ncol = 2, rel_widths = c(2.5, 1),
-  labels = c("D"), label_size = 20
-)
-
-# Combine the two rows into one plot
-combined_plot <- plot_grid(
-  first_row,
-  second_row,
-  ncol = 1, rel_heights = c(3, 3, 0.5) 
-)
-combined_plot
-ggsave("fig3.png", plot = combined_plot, width = 16, height = 12, units = "in",bg = "white")
-
-rm(list=ls())
+ggsave('fig3.png', plot = final_plot, bg='white')
