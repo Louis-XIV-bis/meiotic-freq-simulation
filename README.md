@@ -1,9 +1,12 @@
 # Beyond Recombination: Exploring the Impact of Meiotic Frequency on Genome-wide Genetic Diversity
 
+
 ## Content 
 **/figures** contains all the R scripts to reproduce the plots and statistical tests from the paper (use dataset from **/data**).  
 **/data** contains the merged datasets obtained from all the experiments.
 **/scripts** contains all the scripts used run the simulations and the individual results.  
+
+In order to compte theoretical results (Fig 3, Fig 4,S1 & S2 Appendix), we ran some program written in GFortran for the MacIntosh available in **theoretical_simulations**.
 
 ## About the simulations 
 
@@ -81,6 +84,3 @@ For the new simulations, they will be automatically produced when running **sort
 
 To reproduce the plots from the paper, run the Rscirpts in the **figures/** folder.
 
-
-# Theoretical simulations 
-In order to compte theoretical results (Fig 3, Fig 4,S1 & S2 Appendix), we ran some program written in GFortran for the MacIntosh available in **theoretical_simulations**.
