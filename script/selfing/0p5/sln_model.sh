@@ -3,7 +3,7 @@
 ## Université Paris-Saclay
 ## Lab : LISN ~ UMR9015 ~ BIOINFO team
 
-#SBATCH --job-name=ctrl
+#SBATCH --job-name=selfing
 #SBATCH --array=1-500
 #SBATCH --mem-per-cpu=32GB
 #SBATCH --account=yeast_neutral_model
@@ -22,12 +22,12 @@ h=0.5 # Dominance coefficient
 n=100 # Number of samples for the python part
 windows=50 # Number of windows for sumstats computation on the first chromosome
 rho=5e-8 # Recombination rate (not scaled with GR!)
+selfing=0.5
 
 rep=${SLURM_ARRAY_TASK_ID} # Replicate number
 
 # Test different value for GR (= 1/alpha) 
 for GR in 100 50 10 1; do 
-
     # Run the SLiM simulation : generate a .trees file (= a tree sequence)
     tmpSLiM="results/runInfo_${rep}_${GR}.txt" # Will contains informations about the run (seed, time, etc)
 
@@ -43,5 +43,5 @@ for GR in 100 50 10 1; do
     # Run the Python script : compute SFS, do the demography parameters inference and save them in a file
     python3 tree_sumstats.py $rep $n $Ne $mu $rho $windows $GR
 
-    #rm results/ts_${rep}_${GR}.trees
+    rm results/ts_${rep}_${GR}.trees
 done

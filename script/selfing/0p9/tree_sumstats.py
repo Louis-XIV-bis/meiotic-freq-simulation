@@ -61,15 +61,3 @@ pi_chr2 = pi[-1]
 
 pi_chr1.tofile(f"results/pi_chr1_{rep}_{GR}.csv", sep=',')
 pi_chr2.tofile(f"results/pi_chr2_{rep}_{GR}.csv", sep=',')
-
-# Full chr2 pi 
-windows_chr = np.linspace(0, osrts.sequence_length, num=nb_windows)
-windows_chr = [int(x) for x in windows_chr]
-# pi_full_chr = 
-
-## PI ##
-pi = osrts.diversity(windows=windows_chr, mode='site')
-pi_full_chr2 = pi[(len(pi) - 1)/2]
-
-pi_full_chr2.tofile(f"results/pi_fullchr2_{rep}_{GR}.csv", sep=',')
-

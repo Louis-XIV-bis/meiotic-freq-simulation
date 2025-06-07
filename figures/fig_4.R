@@ -70,7 +70,7 @@ data_chr1
 ###### DATA standard model ############
 
 # Subset data for chr1
-data_chr1_eqn = read_csv('newdata.csv') %>%
+data_chr1_eqn = read_csv('../data/theoretical.csv') %>%
   filter(h == 0.5, window != 'chr2') %>% 
   mutate(alpha = as.factor(alpha),
          pi_pi0 = pi.pi0,

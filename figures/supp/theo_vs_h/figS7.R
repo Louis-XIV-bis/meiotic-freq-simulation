@@ -79,7 +79,7 @@ data_chr1$origin <- "simulation"
 data_chr1
 
 # Read the data from file
-data2 <- read_csv("figS7.csv") %>% as_tibble()
+data2 <- read_csv("../../../data/theoretical.csv") %>% as_tibble() %>% filter(s == 0.05)
 data2_chr1 = data2 %>%
   filter(window != 'chr2') %>% as_tibble() %>%
   mutate(mean_normalized = pi.pi0) %>% 
