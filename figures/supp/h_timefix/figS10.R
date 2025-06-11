@@ -29,7 +29,7 @@ rm(list=ls())
 
 # Subset data for chr1
 data_t = read_csv('../../../data/t_merged.csv') %>%
-  filter(h == 0.5 & s == 0.05 & rho != "0,00000005") %>% #rho != 0.00000005 is to remove rho_fix
+  filter(h == 0.5 & s == 0.05 & rho != '0,00000005') %>% 
   mutate(alpha = as.factor(1 / GR)) %>%
   mutate(ymin = mean - sd, ymax = mean + sd)
 data_t
@@ -52,14 +52,7 @@ plot_t = data_t %>%
              size = 6, position = position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin = ymin, ymax = ymax, color = factor(alpha)), 
                 width = 0.1, linewidth = 1.3, position = position_dodge(width = 0.5)) +
-  scale_shape_manual(
-    values = c(15, 16, 17),  # Shapes for different expressions
-    labels = c(
-      expression(paste("1.", 10^-8)),
-      expression(paste("5.", 10^-8)),
-      expression(paste("1.", 10^-7))
-    )
-  ) +
+  scale_shape_manual(values = c(15, 16, 17)) +  # Shapes: dot, square, triangle
   scale_color_manual(values = colors) +
   labs(x = expression(alpha), 
        y = expression("Time to fixation (generations)"), 
@@ -77,4 +70,4 @@ plot_t = data_t %>%
   scale_y_continuous(limits = y_axis_limits)
 plot_t
 
-ggsave("figS8.png", plot = plot_t, width = 12, height = 10, units = "in")
+ggsave("FigS10.png", plot = plot_t, width = 12, height = 10, units = "in")

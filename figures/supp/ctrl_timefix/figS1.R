@@ -61,5 +61,5 @@ t = ggplot(data, aes(x = alpha, y = mean, color = factor(alpha))) +
   guides(color = "none", fill = "none") + 
   scale_color_manual(values = colors)  # Applying the predefined colors
 
-ggsave(paste0("figS1.png"), plot = t, width = 10, height = 6) 
+ggsave(paste0("FigS1.png"), plot = t, width = 10, height = 6) 
 rm(list=ls())

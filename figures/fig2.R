@@ -206,5 +206,5 @@ combined_plot <- plot_grid(
   ncol = 1, rel_heights = c(3, 3, 0.5) 
 )
 combined_plot
-ggsave("fig2.png", plot = combined_plot, width = 16, height = 12, units = "in",bg = "white")
+ggsave("Fig2.png", plot = combined_plot, width = 16, height = 12, units = "in",bg = "white")
 rm(list=ls())

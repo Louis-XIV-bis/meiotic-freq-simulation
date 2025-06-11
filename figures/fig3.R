@@ -206,5 +206,5 @@ plot <- plot_grid(
 )
 plot
 
-ggsave("fig3.png", plot = plot, width = 16, height = 10, units = "in",bg = "white")
+ggsave("Fig3.png", plot = plot, width = 16, height = 10, units = "in",bg = "white")
 rm(list=ls())

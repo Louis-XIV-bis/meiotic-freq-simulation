@@ -132,6 +132,6 @@ combined_plot <- plot_grid(
 combined_plot
 
 
-png('fig1.png', width=14, height=6, units="in",bg = "white", res=600)
+png('Fig1.png', width=14, height=6, units="in",bg = "white", res=600)
 combined_plot
 dev.off()

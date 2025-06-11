@@ -192,4 +192,4 @@ final_plot <- (theo_vs_simu / theo_simu_chr2) +
 
 final_plot
 
-ggsave('figS7.png', plot = final_plot, bg='white')
+ggsave('FigS7.png', plot = final_plot, bg='white')

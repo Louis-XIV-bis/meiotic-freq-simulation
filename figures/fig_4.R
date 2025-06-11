@@ -153,5 +153,5 @@ pi_pi0 = ggplot(combined_data, aes(x = r, y = pi_pi0, linetype = origin, group =
 
 pi_pi0
 
-ggsave("fig4.png", plot = pi_pi0, width = 10, height = 6) 
+ggsave("Fig4.png", plot = pi_pi0, width = 10, height = 6) 
 
