@@ -1,0 +1,265 @@
+ Program for single sweep with facultative sex (no inbreeding)
+ Uses recombination rates calculated for Haldane mapping function & rec. rate per Mb
+ Diversity is scaled relative to the neutral value
+ 
+ Number of points for Simpsons rule=          200
+ 
+ Selection coefficient=   0.100000001    
+ Dominance coefficient=   0.500000000    
+ 
+ Frequency of meioses=   4.00000019E-03
+ 
+ Fixation index=    0.00000000    
+ Recombination rate per Mb x alpha=   5.00000007E-02
+ 
+ Population size=         1000
+ Neutral mean coalescent time=    2000.00000    
+ Scaled selection coefficient=    200.000000    
+ 
+ Approximate conditional initial and final frequencies of beneficial mutation
+ q1=    4.99999989E-03  q2=   0.995000005    
+ p1=   0.995000005      p2=    4.99999989E-03
+ 
+ Deterministic time to fixation (coalescent time scale)=   0.105866097    
+ 
+ Prob. of no coalescent event during sweep (with no rec.)=   0.122963689    
+ 
+ Unlinked loci
+ 
+ Unscaled recombination rate=    2.00000009E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    4.00000000      r/s =    1.99999996E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    6.40133098E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.341902852    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.343894780    
+ 
+ Barton approximation for rel. diversity=   0.345225513    
+ 
+ 
+ Distance from sweep (Mb)=   0.500000000    
+ 
+ Scaled recombination rate (random mating autosomal value)=    3.99998498    
+ 
+ Unscaled recombination rate=    1.99999241E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    3.99998498      r/s =    1.99999250E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    6.40133917E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.341902018    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.343894005    
+ 
+ Barton approximation for rel. diversity=   0.345224500    
+ 
+ 
+ Distance from sweep (Mb)=   0.375000000    
+ 
+ Scaled recombination rate (random mating autosomal value)=    3.99966073    
+ 
+ Unscaled recombination rate=    1.99983036E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    3.99966073      r/s =    1.99983045E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    6.40150085E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.341885209    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.343876898    
+ 
+ Barton approximation for rel. diversity=   0.345201969    
+ 
+ 
+ Distance from sweep (Mb)=   0.250000000    
+ 
+ Scaled recombination rate (random mating autosomal value)=    3.99227810    
+ 
+ Unscaled recombination rate=    1.99613906E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    3.99227810      r/s =    1.99613906E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    6.40521795E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.341496825    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.343481958    
+ 
+ Barton approximation for rel. diversity=   0.344690025    
+ 
+ 
+ Distance from sweep (Mb)=   0.187500000    
+ 
+ Scaled recombination rate (random mating autosomal value)=    3.96316123    
+ 
+ Unscaled recombination rate=    1.98158063E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    3.96316123      r/s =    1.98158063E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    6.41989857E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.339963675    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.341923058    
+ 
+ Barton approximation for rel. diversity=   0.342666924    
+ 
+ 
+ Distance from sweep (Mb)=   0.125000000    
+ 
+ Scaled recombination rate (random mating autosomal value)=    3.82425237    
+ 
+ Unscaled recombination rate=    1.91212620E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    3.82425237      r/s =    1.91212613E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    6.49045035E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.332592607    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.334431171    
+ 
+ Barton approximation for rel. diversity=   0.332928896    
+ 
+ 
+ Distance from sweep (Mb)=    6.25000000E-02
+ 
+ Scaled recombination rate (random mating autosomal value)=    3.16155434    
+ 
+ Unscaled recombination rate=    1.58077711E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    3.16155434      r/s =    1.58077721E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    6.83897585E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.296111465    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.297415137    
+ 
+ Barton approximation for rel. diversity=   0.284448266    
+ 
+ 
+ Distance from sweep (Mb)=    3.12500000E-02
+ 
+ Scaled recombination rate (random mating autosomal value)=    2.16866660    
+ 
+ Unscaled recombination rate=    1.08433329E-03  phi=    0.00000000    
+ Scaled recombination rate (true value)=    2.16866660      r/s =    1.08433329E-02
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    7.40010813E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.237146735    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.237795115    
+ 
+ Barton approximation for rel. diversity=   0.205139220    
+ 
+ 
+ Distance from sweep (Mb)=    1.56250000E-02
+ 
+ Scaled recombination rate (random mating autosomal value)=    1.29346466    
+ 
+ Unscaled recombination rate=    6.46732340E-04  phi=    0.00000000    
+ Scaled recombination rate (true value)=    1.29346466      r/s =    6.46732328E-03
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    7.93655664E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.180534482    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.180776775    
+ 
+ Barton approximation for rel. diversity=   0.127972245    
+ 
+ 
+ Distance from sweep (Mb)=    7.81250000E-03
+ 
+ Scaled recombination rate (random mating autosomal value)=   0.709689856    
+ 
+ Unscaled recombination rate=    3.54844931E-04  phi=    0.00000000    
+ Scaled recombination rate (true value)=   0.709689856      r/s =    3.54844937E-03
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    8.31784829E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.140166104    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.140241504    
+ 
+ Barton approximation for rel. diversity=    7.23790526E-02
+ 
+ 
+ Distance from sweep (Mb)=    3.90599994E-03
+ 
+ Scaled recombination rate (random mating autosomal value)=   0.372134924    
+ 
+ Unscaled recombination rate=    1.86067467E-04  phi=    0.00000000    
+ Scaled recombination rate (true value)=   0.372134924      r/s =    1.86067459E-03
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    8.54737535E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.115817428    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.115838528    
+ 
+ Barton approximation for rel. diversity=    3.86305451E-02
+ 
+ 
+ Distance from sweep (Mb)=    1.95299997E-03
+ 
+ Scaled recombination rate (random mating autosomal value)=   0.190608978    
+ 
+ Unscaled recombination rate=    9.53044873E-05  phi=    0.00000000    
+ Scaled recombination rate (true value)=   0.190608978      r/s =    9.53044917E-04
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    8.67363736E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =   0.102407634    
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =   0.102413237    
+ 
+ Barton approximation for rel. diversity=    1.99767947E-02
+ 
+ 
+ Distance from sweep (Mb)=    9.76549985E-04
+ 
+ Scaled recombination rate (random mating autosomal value)=    9.64725018E-02
+ 
+ Unscaled recombination rate=    4.82362520E-05  phi=    0.00000000    
+ Scaled recombination rate (true value)=    9.64725018E-02  r/s =    4.82362520E-04
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    8.73991475E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =    9.53649879E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =    9.53664184E-02
+ 
+ Barton approximation for rel. diversity=    1.01611614E-02
+ 
+ 
+ Distance from sweep (Mb)=    4.83300013E-04
+ 
+ Scaled recombination rate (random mating autosomal value)=    4.80391979E-02
+ 
+ Unscaled recombination rate=    2.40195986E-05  phi=    0.00000000    
+ Scaled recombination rate (true value)=    4.80391979E-02  r/s =    2.40195994E-04
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    8.77422392E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =    9.17177200E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =    9.17180777E-02
+ 
+ Barton approximation for rel. diversity=    5.07283211E-03
+ 
+ 
+ Distance from sweep (Mb)=    2.44099996E-04
+ 
+ Scaled recombination rate (random mating autosomal value)=    2.43356228E-02
+ 
+ Unscaled recombination rate=    1.21678113E-05  phi=    0.00000000    
+ Scaled recombination rate (true value)=    2.43356228E-02  r/s =    1.21678117E-04
+ 
+ Net time to coalescence for sweep (exact, uncorr.)=    8.79106671E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. =    8.99267197E-02
+ 
+ Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. =    8.99267793E-02
+ 
+ Barton approximation for rel. diversity=    2.57301331E-03
+ 
+ 
+ Distance from sweep (Mb)=    0.00000000    
