@@ -1,6 +1,6 @@
-    program sweep4
+    program sweep4b
 !   program to calculate sweep effect for mutations with intermediate dominance
-!   autosomal inheritance with facultative sex
+!   autosomal inheritance with facultative sex; selection and recombination adjusted for frequency of meioses
 !   integrations use Simpsons'rule
     
     CHARACTER*20 FOUT,FIN
@@ -55,8 +55,8 @@
     write(1,*) 'Scaled selection coefficient= ',gam0
     write(1,*) ''
     
-    a=FI+(1.0-FI)*h
-    b=(1.0-FI)*(1-2.0*h)
+    a=h
+    b=alpha*(1-2.0*h)
 !   selection parameters
 
     q1=1.0/(2*a*gam0)
@@ -183,11 +183,39 @@
     delpi10=delpi10**2
 
     write(1,*) ''
-    delpi21=1.0-delpi21
-    write(1,*) 'Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. = ',delpi21
-!   This is the value shown in the figures in the paper
+!   write(1,*) 'Prob. of no recombination event during sweep (approx, corr. for within-gen seln.)= ',PNR1
+!   write(1,*) 'Prob. of no recombination event during sweep (exact, uncorr.)= ',PNR2
+!   write(1,*) 'Prob. of coalescence during sweep (approx, corr.)= ',cprob1
+!   write(1,*) 'Prob. of coalescence during sweep (exact, uncorr.)= ',cprob2
+!   write(1,*) ''
+!   write(1,*) 'Mean coalescent time during sweep (approx, corr.)= ',TSC1
+!   write(1,*) 'Mean coalescent time during sweep (exact, uncorr.)= ',TSC2
+!   write(1,*) 'Mean coalescent time during sweep, conditioned on coal. (approx, corr.) = ',TS31
+!   write(1,*) 'Mean coalescent time during sweep, conditioned on coal. (exact, uncorr.) = ',TS32
+!   write(1,*) 'Net time to coalescence for sweep (approx, corr.)= ',TS21
+    write(1,*) 'Net time to coalescence for sweep (exact, uncorr.)= ',TS22
     write(1,*) ''
-
+!   write(1,*) 'Net prob. of recombination (approx, corr.).= ',recp1
+!   write(1,*) 'Net prob. of recombination (exact, uncorr).= ',recp2
+!   write(1,*) ''
+!   write(1,*) 'recorr1= ',recorr1,' recorr2= ',recorr2
+!   write(1,*) 'Net prob. of single recombination event (approx, corr.).= ',recps1
+!   write(1,*) 'Net prob. of single recombination event (exact, uncorr.).= ',recps2
+!   write(1,*) 'Mean time to recombination during sweep, conditioned on rec. (approx, corr.)= ',rect1
+!   write(1,*) 'Mean time to recombination during sweep, conditioned on rec. (exact, uncorr.)= ',rect2
+!   write(1,*) ''
+!   write(1,*) 'Expected reduction in diversity at end of sweep (approx, corr.)= ',delpi1
+!   write(1,*) 'Expected reduction in diversity at end of sweep (exact, uncorr.)= ',delpi2
+!   write(1,*) 'Expected red. in diversity at end of sweep (approx, corr.): Td corr. = ',delpi11
+    delpi12=1.0-delpi12
+    write(1,*) 'Expected relative diversity at end of sweep (exact, uncorr. for inbreed): Td corr. = ',delpi12
+    write(1,*) ''
+    delpi21=1.0-delpi21
+!   write(1,*) 'Expected reduction in diversity at end of sweep (approx, corr.): Td & Tw corr. = ',delpi21
+    write(1,*) 'Expected relative diversity at end of sweep (exact, uncorr.): Td & Tw corr. = ',delpi21
+    write(1,*) ''
+!   write(1,*) 'Expected red. in diversity at end of sweep (direct calculation) = ',delpi10
+    
     if(rho.le.0.001) then
     pnreca=1
     else
@@ -199,7 +227,8 @@
     write(1,*) ''
     go to 10
     
-20  end program sweep4
+20  end program sweep4b
+
 
         subroutine recterm1(a,b,c,FI1,gam,x1,x2,recorr1,recorr2,phi,ANP)
 !       calculates recombination factor A2>A1 for given A2 frequency x
